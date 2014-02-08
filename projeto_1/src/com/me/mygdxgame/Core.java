@@ -38,31 +38,34 @@ public class Core implements ApplicationListener {
 		mundo = new World(new Vector2(0, -9.7f), true);
 		//rendenizador do Box2d
 		render = new Box2DDebugRenderer();
-		//Camera em que o rendenizador será "acoplado"
-		camera = new OrthographicCamera(w,h);
-        camera.viewportHeight = h;  
-        camera.viewportWidth = w;  
+		//Camera em que o rendenizador sera "acoplado"
+		camera = new OrthographicCamera(2,5);
+        camera.viewportHeight = h/4;  
+        camera.viewportWidth = w/4;  
         camera.position.set(camera.viewportWidth * .5f, camera.viewportHeight * .5f, 0f);  
-        camera.update();  
-		 BodyDef groundBodyDef =new BodyDef();  
-         groundBodyDef.position.set(new Vector2(0, 10));  
-         Body groundBody = mundo.createBody(groundBodyDef);  
-         PolygonShape groundBox = new PolygonShape();  
-         groundBox.setAsBox((camera.viewportWidth) * 2, 10.0f);  
-         groundBody.createFixture(groundBox, 0.0f);  
-         //Dynamic Body  
-         BodyDef bodyDef = new BodyDef();  
-         bodyDef.type = BodyType.DynamicBody;  
-         bodyDef.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2);  
-         Body body = mundo.createBody(bodyDef);  
-         CircleShape dynamicCircle = new CircleShape();  
-         dynamicCircle.setRadius(5f);  
-         FixtureDef fixtureDef = new FixtureDef();  
-         fixtureDef.shape = dynamicCircle;  
-         fixtureDef.density = 1.0f;  
-         fixtureDef.friction = 0.0f;  
-         fixtureDef.restitution = 1;  
-         body.createFixture(fixtureDef);  
+        camera.update();   	
+        
+        //Fazendo o Chao que e um corpo rigido... sendo assim nenhuma forca aplicada nele
+        //causara alguma consequencia
+		BodyDef groundBodyDef =new BodyDef();  
+        groundBodyDef.position.set(new Vector2(0, 10));  
+        Body groundBody = mundo.createBody(groundBodyDef);  
+        PolygonShape groundBox = new PolygonShape();  
+        groundBox.setAsBox((camera.viewportWidth) * 2, 10.0f);  
+        groundBody.createFixture(groundBox, 0.0f);  
+        //Dynamic Body  
+        BodyDef bodyDef = new BodyDef();  
+        bodyDef.type = BodyType.DynamicBody;  
+        bodyDef.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2);  
+        Body body = mundo.createBody(bodyDef);  
+        CircleShape dynamicCircle = new CircleShape();  
+        dynamicCircle.setRadius(5f);  
+        FixtureDef fixtureDef = new FixtureDef();  
+        fixtureDef.shape = dynamicCircle;  
+        fixtureDef.density = 1.0f;  
+        fixtureDef.friction = 0.0f;  
+        fixtureDef.restitution = 1;  
+        body.createFixture(fixtureDef);  
 	}
 
 	@Override
