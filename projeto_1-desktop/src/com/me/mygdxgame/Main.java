@@ -1,5 +1,7 @@
 package com.me.mygdxgame;
 
+import br.com.pinducas.screens.Core;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -8,8 +10,8 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "projeto_1";
 		cfg.useGL20 = true;
-		cfg.width = 1920;
-		cfg.height = 1080;
+		cfg.width = 480;
+		cfg.height = 500;
 		
 		new LwjglApplication(new Core(), cfg);
 	}

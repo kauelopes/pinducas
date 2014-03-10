@@ -1,6 +1,7 @@
 package com.me.mygdxgame.client;
 
-import com.me.mygdxgame.Core;
+import br.com.pinducas.screens.Core;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
