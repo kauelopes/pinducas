@@ -39,7 +39,7 @@ public class MenuInicial implements Screen {
 		font.draw(spriteBatch, "aperte B", 0, -17);
 		spriteBatch.end();
 		if(Gdx.input.isKeyPressed(Keys.B)){
-			game.setScreen(game.jogoScreen);
+			game.setScreen(new JogoScreen(game));
 		}
 		
 

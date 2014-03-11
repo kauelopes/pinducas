@@ -1,6 +1,5 @@
 package br.com.pinducas.screens;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 
 public class OpenScreen implements Screen{
 	
@@ -40,7 +38,7 @@ public class OpenScreen implements Screen{
 			font.draw(spriteBatch, "Aperte A", 0, -17);
 		spriteBatch.end();
 		if(Gdx.input.isKeyPressed(Keys.A)){
-			game.setScreen(game.menuInicial);
+			game.setScreen(new MenuInicial(game));
 		}
 		
 	}

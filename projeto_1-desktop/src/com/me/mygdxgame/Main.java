@@ -10,8 +10,9 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "projeto_1";
 		cfg.useGL20 = true;
-		cfg.width = 480;
-		cfg.height = 500;
+		cfg.width = 1024;
+		cfg.height = 768;
+		cfg.resizable = false;
 		
 		new LwjglApplication(new Core(), cfg);
 	}
