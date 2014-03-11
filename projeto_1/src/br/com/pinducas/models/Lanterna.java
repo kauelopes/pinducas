@@ -1,12 +1,10 @@
 package br.com.pinducas.models;
 
-import javax.xml.stream.events.StartDocument;
+import box2dLight.ConeLight;
+import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-
-import box2dLight.ConeLight;
-import box2dLight.RayHandler;
 
 public class Lanterna extends ConeLight {
 	public Vector2 posicao = new Vector2();

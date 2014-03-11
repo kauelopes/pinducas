@@ -1,6 +1,5 @@
 package br.com.pinducas.models;
 
-import box2dLight.ConeLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
@@ -8,12 +7,12 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Guarda {
+public class Jogador {
 	public Body body;
 	public Lanterna lanterna;
 	private World world;
@@ -22,16 +21,33 @@ public class Guarda {
 				velocidadeNormal,
 				velocidadeDeCorrida;
 	private float angle;
-	
+	int btnCorrida, btnR, btnL, btnU, btnD;
     boolean right,left,up,down;
 
 	
-	public Guarda(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
+	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
 		this.world = world;
 		CriaCorpo();
 		CriaLanterna(rayHandler);
+		btnCorrida = Keys.SHIFT_LEFT;
+		btnR = Keys.RIGHT;
+		btnL = Keys.LEFT;
+		btnU = Keys.UP;
+		btnD = Keys.DOWN;
+	}
+	
+	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida, int blabla, int bCorrida, int bR, int bL, int bU, int bD){
+		this.velocidadeDeCorrida = velocidadeDeCorrida;
+		this.velocidadeNormal = velocidadeDeMovimentacao;
+		this.world = world;
+		CriaCorpo();
+		btnCorrida = bCorrida;
+		btnR = bR;
+		btnL = bL;
+		btnU = bU;
+		btnD = bD;
 	}
 	
 	
@@ -58,45 +74,59 @@ public class Guarda {
 	}
 
 	private void CriaLanterna(RayHandler rayHandler){
-		lanterna = new Lanterna(rayHandler, 100, Color.BLUE, 200, 0, 0, 0, 50);
+		lanterna = new Lanterna(rayHandler, 100, Color.BLUE, 300, 0, 0, 0, 40);
         lanterna.attachToBody(body, 0, 0);
 	}
 	
 	
 	public void loop(){
-         anda();
+         anda(btnCorrida, btnR, btnL, btnU, btnD);
+         estadoLanterna();
 	}
 
 	 
-	 private void anda(){
+	 private void estadoLanterna() {
+		 if(Gdx.input.isKeyPressed(Keys.L)){
+			 if(lanterna.isActive()){
+				 lanterna.setActive(false);
+			 }else lanterna.setActive(true);
+		 }
+	}
+
+	private void anda(int btnCorrida, int btnR, int btnL, int btnU, int btnD){
 		 vX = 0;
 		 vY = 0;
 		 int velocidade; 
 		 
-		 
-		 if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
+		 //Botao de corrida
+		 if(Gdx.input.isKeyPressed(btnCorrida)){
 			 velocidade = velocidadeDeCorrida;
 		 }else velocidade= velocidadeNormal;
-         
-         if(Gdx.input.isKeyPressed(Keys.RIGHT))
+		 
+		 
+         //Botoes de movimentacao horizontal
+         if(Gdx.input.isKeyPressed(btnR)){
         	 right=true;
-         else if(Gdx.input.isKeyPressed(Keys.LEFT)){
+         }else if(Gdx.input.isKeyPressed(btnL)){
         	 left=true;
          }
         
-         if(Gdx.input.isKeyPressed(Keys.UP)){
+         //botoes de movimentao vertica;
+         if(Gdx.input.isKeyPressed(btnU)){
         	 up=true;
-         }
-         else if(Gdx.input.isKeyPressed(Keys.DOWN)){
+         }else if(Gdx.input.isKeyPressed(btnD)){
         	 down=true;
          }
-         if(!Gdx.input.isKeyPressed(Keys.RIGHT))
+         
+         
+         //Botoes soltos.
+         if(!Gdx.input.isKeyPressed(btnR))
         	 right=false;
-         if(!Gdx.input.isKeyPressed(Keys.LEFT))
+         if(!Gdx.input.isKeyPressed(btnL))
         	 left=false;
-         if(!Gdx.input.isKeyPressed(Keys.UP))
+         if(!Gdx.input.isKeyPressed(btnU))
         	 up=false;
-         if(!Gdx.input.isKeyPressed(Keys.DOWN))
+         if(!Gdx.input.isKeyPressed(btnD))
         	 down=false;
          
          

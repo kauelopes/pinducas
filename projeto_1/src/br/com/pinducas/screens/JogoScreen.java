@@ -1,12 +1,13 @@
 package br.com.pinducas.screens;
 
-import javax.swing.Spring;
-
+import box2dLight.PointLight;
 import box2dLight.RayHandler;
-import br.com.pinducas.models.Guarda;
+import br.com.pinducas.models.Jogador;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,15 +16,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Text;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class JogoScreen implements Screen {
 
@@ -32,17 +37,22 @@ public class JogoScreen implements Screen {
 	Core game;
 
 	OrthographicCamera camera;
-	
+
+	OrthographicCamera cam;
+
 	World world;
 	
+	//Rendenizadores Gerais
+	//Luz:
 	RayHandler rayHandler;
+	//Sprite:
 	SpriteBatch spriteBatch;
+	//Fisica
 	Box2DDebugRenderer box2dDebugRender;
 
-	Guarda guarda;
+	Jogador guarda;
 	
-	BitmapFont font;
-	
+	//Constantes do Box2dphysics
 	static final float BOX_STEP=1/60f;  
 	static final int BOX_VELOCITY_ITERATIONS=6;  
 	static final int BOX_POSITION_ITERATIONS=2;  
@@ -56,10 +66,19 @@ public class JogoScreen implements Screen {
     | 			Tudo fora desse espaco e final			  |
     \----------------------------------------------------*/
 	
+	
+	//Fonte para escrever em baixo
+		BitmapFont font;
+		
+	//Sprite da imagem Default do Libgdx
 	Sprite sprite;
 	
+	//Render do TiledMap
+	TiledMapRenderer tileMapRenderer;
 	
-	
+	//Map
+    TiledMap map;	
+
 	
 	/*---------------------------------------------------\
 	|		 		Fim do Espaco de teste           	  |
@@ -69,26 +88,34 @@ public class JogoScreen implements Screen {
 	public JogoScreen(Core core){
 		this.game = core;
 	}
-    
+
+	
+	
 	@Override
 	public void show() {
 		
+		//Camera para Box2d, Sprite, tiledMap e Luz
 		
 		camera = new OrthographicCamera(game.WIDTH, game.HEIGHT);
 		camera.update();
+
 		
-		world = new World(new Vector2(0, -1), true);
+		world = new World(new Vector2(0, 0), true);
 		
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(camera.combined);
 		
-		guarda = new Guarda(world, rayHandler, 40, 80);
-		
-		box2dDebugRender = new Box2DDebugRenderer();
-         
-        spriteBatch = new SpriteBatch();
-        spriteBatch.setProjectionMatrix(camera.combined);
+		spriteBatch = new SpriteBatch();
+		spriteBatch.setProjectionMatrix(camera.combined);
 
+		box2dDebugRender = new Box2DDebugRenderer();
+		
+		map = new TmxMapLoader().load("assets/mapa.tmx");
+		
+		tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
+	
+		guarda = new Jogador(world, rayHandler, 40, 100);
+		      
         font = new BitmapFont();
     
 		
@@ -96,29 +123,19 @@ public class JogoScreen implements Screen {
 	    | 	Area abaixo reservada para testes com variaveis.  |
 	    | 			Tudo fora desse espaco e final			  |
 	    \----------------------------------------------------*/
-		Texture texture = new Texture(Gdx.files.internal("assets/libgdx.png"));
-		texture.setFilter(TextureFilter.Nearest, TextureFilter.Linear);
 		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		sprite = new Sprite(region);
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
-		
-        
         BodyDef bodyDef = new BodyDef();  
-	    bodyDef.type = BodyType.DynamicBody;  
+	    bodyDef.type = BodyType.StaticBody;  
 	    bodyDef.position.set(0,0);  
 	    
 	    Body body = world.createBody(bodyDef);
 	    
-	    CircleShape dynamicCircle = new CircleShape();  
-	    dynamicCircle.setRadius(10f);
+	    PolygonShape shape = new PolygonShape();
+	    shape.setAsBox(50, 50);
 	    
 	    FixtureDef fixtureDef = new FixtureDef();  
-	    fixtureDef.shape = dynamicCircle;  
-	    fixtureDef.density = 1.0f;  
-	    fixtureDef.friction = 0.8f;  
-	    fixtureDef.restitution = 2f;
+	    fixtureDef.shape = shape;
+	   
 	    
 	    body.createFixture(fixtureDef);
 	    body.setFixedRotation(true);
@@ -133,39 +150,46 @@ public class JogoScreen implements Screen {
 	
 	@Override
 	public void render(float delta) {
+		//Limpa a Tela
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT );
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-
-		world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-		box2dDebugRender.render(world, camera.combined);
-		guarda.loop();
-		spriteBatch.begin();
-		sprite.draw(spriteBatch);
 		
-		spriteBatch.end();
-		//
-		if(guarda.lanterna.contem((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)), 40)){
-			System.out.println("Contem o mouse");
-        }else System.out.println("Nao Contem");
+		guarda.loop();
+								
+		world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
+		
+		tileMapRenderer.setView(camera);
+		tileMapRenderer.render();
+		
+		box2dDebugRender.render(world, camera.combined);
+		
+
 		rayHandler.updateAndRender();
+		rayHandler.setCombinedMatrix(camera.combined);
+		camera.translate(0.1f, 0.1f);
+		camera.update();	
+
+		
 		spriteBatch.begin();
 		font.draw(spriteBatch, " Distance:"+guarda.lanterna.posicao.x+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
 		spriteBatch.end();
-		
 
 	    /*---------------------------------------------------\
 	    | 	Area abaixo reservada para testes com variaveis.  |
 	    | 			Tudo fora desse espaco e final			  |
 	    \----------------------------------------------------*/
 		
-		
-		
-		
+		//Verifica se o mouse esta dentro da luz
+		if(guarda.lanterna.contem((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)), 40)){
+			System.out.println("Contem o mouse");
+        }else System.out.println("Nao Contem");
 		
 		
 		/*---------------------------------------------------\
 		|		 		Fim do Espaco de teste           	  |
 		\---------------------------------------------------*/
+		
+		
 		
 	}
 
