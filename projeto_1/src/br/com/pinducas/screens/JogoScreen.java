@@ -3,6 +3,7 @@ package br.com.pinducas.screens;
 import box2dLight.ConeLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
+import br.com.pinducas.models.Guarda;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -30,6 +31,7 @@ public class JogoScreen implements Screen {
 	OrthographicCamera camera;
 	Box2DDebugRenderer box2dDebugRender;
 	SpriteBatch spriteBatch;
+	Guarda guarda;
 	
 	BitmapFont font;
 	
@@ -42,7 +44,6 @@ public class JogoScreen implements Screen {
     static final float WORLD_TO_BOX=0.01f;  
     static final float BOX_WORLD_TO=100f;
     
-    ConeLight lanterna;
 
 	public JogoScreen(Core core){
 		this.game = core;
@@ -60,35 +61,14 @@ public class JogoScreen implements Screen {
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(camera.combined);
 		
-		 BodyDef groundBodyDef =new BodyDef();  
-         groundBodyDef.position.set(new Vector2(0, 10));  
-         Body groundBody = world.createBody(groundBodyDef);  
-         PolygonShape groundBox = new PolygonShape();  
-         groundBox.setAsBox((camera.viewportWidth) * 2, 10.0f);  
-         groundBody.createFixture(groundBox, 0.0f);  
-         //Dynamic Body  
-         BodyDef bodyDef = new BodyDef();  
-         bodyDef.type = BodyType.DynamicBody;  
-         bodyDef.position.set(0,0);  
-         Body body = world.createBody(bodyDef);  
-         CircleShape dynamicCircle = new CircleShape();  
-         dynamicCircle.setRadius(10f);  
-         FixtureDef fixtureDef = new FixtureDef();  
-         fixtureDef.shape = dynamicCircle;  
-         fixtureDef.density = 1.0f;  
-         fixtureDef.friction = 0.0f;  
-         fixtureDef.restitution = 2f;  
-         body.createFixture(fixtureDef);  
-         box2dDebugRender = new Box2DDebugRenderer();  
+		guarda = new Guarda(world, rayHandler, 40);
+		
+		box2dDebugRender = new Box2DDebugRenderer();
          
-         lanterna = new ConeLight(rayHandler, 100, Color.YELLOW, 200, 0, 0, 0, 50);
-         lanterna.attachToBody(body, 0, 0);
-         
-         
-         spriteBatch = new SpriteBatch();
-         spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch = new SpriteBatch();
+        spriteBatch.setProjectionMatrix(camera.combined);
 
-         font = new BitmapFont();
+        font = new BitmapFont();
 		
 	}
 	
@@ -97,13 +77,13 @@ public class JogoScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT );
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		rayHandler.updateAndRender();
-		box2dDebugRender.render(world, camera.combined);
 		world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-		
+		box2dDebugRender.render(world, camera.combined);
+		guarda.loop();
 		spriteBatch.begin();
-			font.draw(spriteBatch, " Distance:"+lanterna.getDistance()+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
+		font.draw(spriteBatch, " Distance:"+guarda.lanterna.getDistance()+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
 		spriteBatch.end();
-		if(lanterna.contains((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)))){
+		if(guarda.lanterna.contains((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)))){
 			System.out.println("Contem o mouse");
         }else System.out.println("Nao Contem");
 
