@@ -141,12 +141,16 @@ public class JogoScreen implements Screen {
 		guarda.loop();
 		spriteBatch.begin();
 		sprite.draw(spriteBatch);
-		font.draw(spriteBatch, " Distance:"+guarda.lanterna.getDistance()+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
+		
 		spriteBatch.end();
-		if(guarda.lanterna.contains((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)))){
+		//
+		if(guarda.lanterna.contem((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)), 40)){
 			System.out.println("Contem o mouse");
         }else System.out.println("Nao Contem");
 		rayHandler.updateAndRender();
+		spriteBatch.begin();
+		font.draw(spriteBatch, " Distance:"+guarda.lanterna.posicao.x+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
+		spriteBatch.end();
 		
 
 	    /*---------------------------------------------------\

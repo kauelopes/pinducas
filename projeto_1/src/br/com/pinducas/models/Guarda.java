@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Guarda {
 	public Body body;
-	public ConeLight lanterna;
+	public Lanterna lanterna;
 	private World world;
 	private int vY,
 				vX,
@@ -58,7 +58,7 @@ public class Guarda {
 	}
 
 	private void CriaLanterna(RayHandler rayHandler){
-		lanterna = new ConeLight(rayHandler, 100, Color.BLUE, 200, 0, 0, 0, 50);
+		lanterna = new Lanterna(rayHandler, 100, Color.BLUE, 200, 0, 0, 0, 50);
         lanterna.attachToBody(body, 0, 0);
 	}
 	
