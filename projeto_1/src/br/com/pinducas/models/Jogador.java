@@ -19,16 +19,19 @@ public class Jogador {
 	private int vY,
 				vX,
 				velocidadeNormal,
-				velocidadeDeCorrida;
+				velocidadeDeCorrida,
+				velocidadeAtual;
 	private float angle;
 	int btnCorrida, btnR, btnL, btnU, btnD;
     boolean right,left,up,down;
-
-
-	
+    boolean lanternaSwitch;
+    
+    
 	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
+		this.velocidadeAtual= velocidadeDeMovimentacao;
+		
 		this.world = world;
 		CriaCorpo();
 		CriaLanterna(rayHandler);
@@ -39,7 +42,7 @@ public class Jogador {
 		btnD = Keys.DOWN;
 	}
 	
-	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida, int blabla, int bCorrida, int bR, int bL, int bU, int bD){
+	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida, int bCorrida, int bR, int bL, int bU, int bD){
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
 		this.world = world;
@@ -77,31 +80,74 @@ public class Jogador {
 		lanterna = new Lanterna(rayHandler, 100, Color.BLUE, 300, 0, 0, 0, 40);
         lanterna.attachToBody(body, 0, 0);
 	}
-	
+	public void Initialize(){
+		lanternaSwitch = true;
+		
+	}
 	
 	public void loop(){
          anda(btnCorrida, btnR, btnL, btnU, btnD);
+         Update();
          estadoLanterna();
+         
 	}
 
 	 
 	 private void estadoLanterna() {
-		 if(Gdx.input.isKeyPressed(Keys.L)){
-			 if(lanterna.isActive()){
+		 if(Gdx.input.isKeyPressed(Keys.F)&&lanternaSwitch){
+			 lanternaSwitch = false;
+			 if(lanterna.isActive())
 				 lanterna.setActive(false);
-			 }else lanterna.setActive(true);
+			 else 
+				 lanterna.setActive(true);
 		 }
+		 if(!Gdx.input.isKeyPressed(Keys.F)&&!lanternaSwitch)
+			 lanternaSwitch=true;
 	}
-
-	private void anda(int btnCorrida, int btnR, int btnL, int btnU, int btnD){
-		 vX = 0;
-		 vY = 0;
-		 int velocidade; 
-		 
+	private void Update(){
+		 if(right){
+        	 vX = velocidadeAtual;
+             angle=(float)Math.toRadians(0);
+             if(up){
+            	 angle=(float)Math.toRadians(45);
+            	 vY = velocidadeAtual;
+             }
+             if(down){
+            	 angle=(float)Math.toRadians(315);
+            	 vY = -velocidadeAtual;
+             }
+         }
+         else if(left){
+        	 vX = -velocidadeAtual;
+        	 angle=(float)Math.toRadians(180);
+             if(up){
+                     angle=(float)Math.toRadians(135);
+                     vY = velocidadeAtual;
+             }
+             if(down){
+                     angle=(float)Math.toRadians(225);
+                     vY = -velocidadeAtual;
+             }
+         }
+         else if(up){
+        	 angle=(float)Math.toRadians(90);
+        	 vY = velocidadeAtual;
+         }
+         else if(down){
+        	 angle=(float)Math.toRadians(270);
+        	 vY = -velocidadeAtual;
+         }
+         
+         body.setLinearVelocity(vX, vY);
+         body.setTransform(body.getPosition(), angle);
+	}
+	private void anda(int btnCorrida, int btnR, int btnL, int btnU, int btnD){ 
 		 //Botao de corrida
+		 vX=0;
+		 vY=0;
 		 if(Gdx.input.isKeyPressed(btnCorrida)){
-			 velocidade = velocidadeDeCorrida;
-		 }else velocidade= velocidadeNormal;
+			 velocidadeAtual = velocidadeDeCorrida;
+		 }else velocidadeAtual= velocidadeNormal;
 		 
 		 
          //Botoes de movimentacao horizontal
@@ -130,40 +176,6 @@ public class Jogador {
         	 down=false;
          
          
-         if(right){
-        	 vX += velocidade;
-             angle=(float)Math.toRadians(0);
-             if(up){
-            	 angle=(float)Math.toRadians(45);
-            	 vY += velocidade;
-             }
-             if(down){
-            	 angle=(float)Math.toRadians(315);
-            	 vY -= velocidade;
-             }
-         }
-         else if(left){
-        	 vX -= velocidade;
-        	 angle=(float)Math.toRadians(180);
-             if(up){
-                     angle=(float)Math.toRadians(135);
-                     vY += velocidade;
-             }
-             if(down){
-                     angle=(float)Math.toRadians(225);
-                     vY -= velocidade;
-             }
-         }
-         else if(up){
-        	 angle=(float)Math.toRadians(90);
-        	 vY += velocidade;
-         }
-         else if(down){
-        	 angle=(float)Math.toRadians(270);
-        	 vY -= velocidade;
-         }
-         
-         body.setLinearVelocity(vX, vY);
-         body.setTransform(body.getPosition(), angle);
+        
 	 }	
 }
