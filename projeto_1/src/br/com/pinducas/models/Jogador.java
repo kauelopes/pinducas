@@ -40,7 +40,7 @@ public class Jogador {
     private float angle;
     int btnCorrida, btnR, btnL, btnU, btnD;
     boolean right,left,up,down,upRight,upLeft,downRight,downLeft;
-    
+    float keyTimer;
     //Variaveis da spriteSheet
     Texture spriteSheet;
     ArrayList<TextureRegion[]> sprites;
@@ -160,6 +160,7 @@ public class Jogador {
 	}
 	
 	private void Update(){
+		//SETTING CURRENT ACTION
 		if(currentAction<=7)
 			numFrames=3;
 		if(right)
@@ -184,7 +185,7 @@ public class Jogador {
 			rodando=false;
 		
 		
-		
+		//WALKING AND SETTING LANTERN ANGLE
 		if(right){
        	 vX = velocidadeAtual;
          angle=(float)Math.toRadians(0);
@@ -219,6 +220,9 @@ public class Jogador {
     }
         body.setLinearVelocity(vX, vY);
         body.setTransform(body.getPosition(), angle);
+        
+        
+       // System.out.println(body.getPosition());
 	}
 	
 	private void Draw(){
@@ -256,6 +260,9 @@ public class Jogador {
 		 }else velocidadeAtual= velocidadeNormal;
 
 		
+		 keyTimer+=Gdx.graphics.getDeltaTime();
+		 System.out.println(keyTimer);
+		 if(keyTimer>0.07f){
          //Botoes de movimentacao Horizontal e Vertical
          if(Gdx.input.isKeyPressed(btnR)){
         	 right=true;
@@ -277,8 +284,8 @@ public class Jogador {
          if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnD))
         	 downLeft=true;
 		 
+        
          
-       
          if(!Gdx.input.isKeyPressed(btnR)){
         	 right=false;
         	 upRight=false;
@@ -291,15 +298,17 @@ public class Jogador {
          }
          if(!Gdx.input.isKeyPressed(btnU)){
         	 up=false;
-        	
+        	 upLeft=false;
+        	 upRight=false;
          }
          if(!Gdx.input.isKeyPressed(btnD)){
         	 down=false;
+        	 downLeft=false;
+        	 downRight=false;
         	
          }
-        
-
-       
+         keyTimer=0;
+		 }
 	 }	
 		
 	public float getX(){return body.getPosition().x;}
