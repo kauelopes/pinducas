@@ -107,7 +107,7 @@ public class JogoScreen implements Screen {
                
                 tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
        
-                guarda = new Jogador(world, rayHandler, 60, 150);
+                guarda = new Jogador(world,new Vector2(0,0), rayHandler, 60, 150);
                      
         font = new BitmapFont();
    

@@ -5,6 +5,7 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -27,13 +28,12 @@ public class Jogador {
     boolean lanternaSwitch;
     
     
-	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
+	public Jogador(World world,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
 		this.velocidadeAtual= velocidadeDeMovimentacao;
-		
 		this.world = world;
-		CriaCorpo();
+		CriaCorpo(position);
 		CriaLanterna(rayHandler);
 		btnCorrida = Keys.SHIFT_LEFT;
 		btnR = Keys.RIGHT;
@@ -42,11 +42,12 @@ public class Jogador {
 		btnD = Keys.DOWN;
 	}
 	
-	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida, int bCorrida, int bR, int bL, int bU, int bD){
+	public Jogador(World world,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida, int bCorrida, int bR, int bL, int bU, int bD){
+		Initialize();
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
 		this.world = world;
-		CriaCorpo();
+		CriaCorpo(position);
 		btnCorrida = bCorrida;
 		btnR = bR;
 		btnL = bL;
@@ -55,10 +56,10 @@ public class Jogador {
 	}
 	
 	
-	private void CriaCorpo(){
+	private void CriaCorpo(Vector2 position){
 		BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
-	    bodyDef.position.set(0,0);  
+	    bodyDef.position.set(position);  
 	    
 	    body = world.createBody(bodyDef);
 	    
@@ -81,8 +82,10 @@ public class Jogador {
         lanterna.attachToBody(body, 0, 0);
 	}
 	public void Initialize(){
+		vX=0;
+		vY=0;
 		lanternaSwitch = true;
-		
+		angle=0;
 	}
 	
 	public void loop(){
@@ -174,8 +177,9 @@ public class Jogador {
         	 up=false;
          if(!Gdx.input.isKeyPressed(btnD))
         	 down=false;
-         
-         
-        
 	 }	
+		
+	public float getX(){return body.getPosition().x;}
+	public float getY(){return body.getPosition().y;}
+	
 }
