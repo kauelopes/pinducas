@@ -123,23 +123,8 @@ public class JogoScreen implements Screen {
 	    | 	Area abaixo reservada para testes com variaveis.  |
 	    | 			Tudo fora desse espaco e final			  |
 	    \----------------------------------------------------*/
-		
-        BodyDef bodyDef = new BodyDef();  
-	    bodyDef.type = BodyType.StaticBody;  
-	    bodyDef.position.set(0,0);  
-	    
-	    Body body = world.createBody(bodyDef);
-	    
-	    PolygonShape shape = new PolygonShape();
-	    shape.setAsBox(50, 50);
-	    
-	    FixtureDef fixtureDef = new FixtureDef();  
-	    fixtureDef.shape = shape;
-	   
-	    
-	    body.createFixture(fixtureDef);
-	    body.setFixedRotation(true);
-
+        
+        
 
 	    
 		/*---------------------------------------------------\
