@@ -142,7 +142,7 @@ public class JogoScreen implements Screen {
  
                 rayHandler.updateAndRender();
                 rayHandler.setCombinedMatrix(camera.combined);
-                camera.translate(0.1f, 0.1f);
+                
                 camera.update();       
  
                
