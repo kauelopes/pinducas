@@ -109,12 +109,8 @@ public class JogoScreen implements Screen {
                
                 tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
        
-<<<<<<< HEAD
                 guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 60, 150);
-=======
 
-                guarda = new Jogador(world,new Vector2(0,0), rayHandler, 60, 150);
->>>>>>> 32b28d5818d83795f11dab97c518528725fedf19
                      
         font = new BitmapFont();
    
@@ -129,7 +125,7 @@ public class JogoScreen implements Screen {
                 /*---------------------------------------------------\
                 |       	Fim do Espaco de teste                    |
                 \---------------------------------------------------*/
- 
+           
         }
        
         @Override
@@ -138,7 +134,7 @@ public class JogoScreen implements Screen {
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT );
                 Gdx.gl.glClearColor(0, 0, 0, 1);
                
-                guarda.loop();
+              
                                                                
                 world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
                
@@ -148,19 +144,24 @@ public class JogoScreen implements Screen {
                 box2dDebugRender.render(world, camera.combined);
                
  
-                rayHandler.updateAndRender();
-                rayHandler.setCombinedMatrix(camera.combined);
-                
+              
+               
                 camera.update();       
  
                 p.setPosition(0,0);
                 p.start();
 
+                
+                rayHandler.updateAndRender();
+                rayHandler.setCombinedMatrix(camera.combined);
+                
                 spriteBatch.begin();
                 p.draw(spriteBatch, delta);
                 font.draw(spriteBatch, " Distance:"+guarda.lanterna.posicao.x+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
+                guarda.loop();
                 spriteBatch.end();
- 
+             
+                
             /*---------------------------------------------------\
             |   Area abaixo reservada para testes com variaveis.  |
             |                   Tudo fora desse espaco e final   |

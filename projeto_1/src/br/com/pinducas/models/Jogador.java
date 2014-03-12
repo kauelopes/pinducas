@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -42,7 +43,14 @@ public class Jogador {
     
     //Variaveis da spriteSheet
     Texture spriteSheet;
-    public ArrayList<TextureRegion[]> sprites;
+    ArrayList<TextureRegion[]> sprites;
+    TextureRegion currentFrame;
+    int currentFrameNum;
+    int numFrames;
+    int currentAction;
+    boolean rodando;
+    float timer;
+    
     //Setting TextureRegions indexes
     private static final int walkD=0;
     private static final int walkL=1;
@@ -60,6 +68,7 @@ public class Jogador {
     
     
 	public Jogador(World world,SpriteBatch spriteBatch,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
+		Initialize();
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
 		this.velocidadeAtual= velocidadeDeMovimentacao;
@@ -112,7 +121,7 @@ public class Jogador {
 	}
 
 	private void CriaLanterna(RayHandler rayHandler){
-		lanterna = new Lanterna(rayHandler, 100, Color.BLACK, 300, 0, 0, 0, 40);
+		lanterna = new Lanterna(rayHandler, 100, Color.YELLOW, 300, 0, 0, 0, 40);
         lanterna.attachToBody(body, 0, 0);
 	}
 	public void Initialize(){
@@ -120,13 +129,15 @@ public class Jogador {
 		vY=0;
 		lanternaSwitch = true;
 		angle=0;
+		currentFrameNum=0;
+		currentAction = walkR;
+		rodando=false;
 		
 		//Loading Sprites
-		
 		sprites=new ArrayList<TextureRegion[]>();
-		try{
-		spriteSheet =  new Texture(Gdx.files.internal("/jogador/Sheet.png"));  
-		}catch(Exception e)	{e.printStackTrace();}
+		
+		spriteSheet =  new Texture(Gdx.files.internal("assets/jogador/Sheet.png"));  
+		
 		TextureRegion[][]temp =  TextureRegion.split(spriteSheet, spriteSheet.getWidth() / 
 				3, spriteSheet.getHeight() / 8);  
 		TextureRegion [] temporario = new TextureRegion[3];
@@ -134,8 +145,10 @@ public class Jogador {
 			for(int coluna=0;coluna<3;coluna++){
 				temporario[coluna]=temp[linha][coluna];
 			}
-			sprites.add(temporario);
+				sprites.add(temporario);
+				temporario = new TextureRegion[3];
 		}
+		
 	}
 	
 	public void loop(){
@@ -147,7 +160,32 @@ public class Jogador {
 	}
 	
 	private void Update(){
-		 if(right){
+		if(currentAction<=7)
+			numFrames=3;
+		if(right)
+			currentAction=walkR;
+		if(left)
+			currentAction=walkL;
+		if(up)
+			currentAction=walkU;
+		if(down)
+			currentAction=walkD;
+		if(upRight)
+			currentAction=walkRU;
+		if(upLeft)
+			currentAction=walkLU;
+		if(downRight)
+			currentAction=walkRD;
+		if(downLeft)
+			currentAction=walkLD;
+		if(right||left||up||down||upRight||upLeft||downRight||downLeft)
+			rodando=true;
+		else
+			rodando=false;
+		
+		
+		
+		if(right){
        	 vX = velocidadeAtual;
             angle=(float)Math.toRadians(0);
             if(up){
@@ -185,8 +223,18 @@ public class Jogador {
 	}
 	
 	private void Draw(){
-		
-		
+		if(rodando){
+			timer+= Gdx.graphics.getDeltaTime();  
+			if(timer>0.2f){
+			currentFrameNum++;
+				if(currentFrameNum>numFrames-1)
+					currentFrameNum=0;
+			timer=0;
+			}
+			
+		}
+		currentFrame = sprites.get(currentAction)[currentFrameNum];
+        sb.draw(currentFrame,body.getPosition().x-18,body.getPosition().y-18);                  
 	}
 	
 	private void estadoLanterna() {
@@ -200,15 +248,14 @@ public class Jogador {
 		 if(!Gdx.input.isKeyPressed(Keys.F)&&!lanternaSwitch)
 			 lanternaSwitch=true;
 	}
-	private void anda(){ 
+	private void anda(){
 		 //Botao de corrida
 		 vX=0;
 		 vY=0;
 		 if(Gdx.input.isKeyPressed(btnCorrida)){
 			 velocidadeAtual = velocidadeDeCorrida;
 		 }else velocidadeAtual= velocidadeNormal;
-		 
-		 
+
          //Botoes de movimentacao horizontal
          if(Gdx.input.isKeyPressed(btnR)){
         	 right=true;
