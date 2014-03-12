@@ -24,6 +24,7 @@ public class Jogador {
 	int btnCorrida, btnR, btnL, btnU, btnD;
     boolean right,left,up,down;
 
+
 	
 	public Jogador(World world, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
@@ -68,8 +69,7 @@ public class Jogador {
 	    fixtureDef.restitution = 0.2f;
 	    
 	    body.createFixture(fixtureDef);
-	    body.setFixedRotation(true);
-	    
+	    body.setFixedRotation(true);	    
 	    
 	}
 
