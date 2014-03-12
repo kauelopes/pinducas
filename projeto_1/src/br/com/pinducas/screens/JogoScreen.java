@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -71,6 +72,7 @@ public class JogoScreen implements Screen {
        
         //Map
     TiledMap map;      
+    ParticleEffect p;
  
        
         /*---------------------------------------------------\
@@ -107,7 +109,12 @@ public class JogoScreen implements Screen {
                
                 tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
        
+<<<<<<< HEAD
                 guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 60, 150);
+=======
+
+                guarda = new Jogador(world,new Vector2(0,0), rayHandler, 60, 150);
+>>>>>>> 32b28d5818d83795f11dab97c518528725fedf19
                      
         font = new BitmapFont();
    
@@ -117,7 +124,8 @@ public class JogoScreen implements Screen {
             |                   Tudo fora desse espaco e final    |
             \----------------------------------------------------*/
                
-           
+           p = new ParticleEffect();
+           p.load(Gdx.files.internal("assets/spark.p"), Gdx.files.internal("assets"));
                 /*---------------------------------------------------\
                 |       	Fim do Espaco de teste                    |
                 \---------------------------------------------------*/
@@ -145,8 +153,11 @@ public class JogoScreen implements Screen {
                 
                 camera.update();       
  
-               
+                p.setPosition(0,0);
+                p.start();
+
                 spriteBatch.begin();
+                p.draw(spriteBatch, delta);
                 font.draw(spriteBatch, " Distance:"+guarda.lanterna.posicao.x+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
                 spriteBatch.end();
  
