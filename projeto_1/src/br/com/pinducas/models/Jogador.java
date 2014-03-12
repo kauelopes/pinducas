@@ -1,5 +1,8 @@
 package br.com.pinducas.models;
 
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -14,6 +18,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+
+
 
 public class Jogador {
 	
@@ -36,6 +42,22 @@ public class Jogador {
     
     //Variaveis da spriteSheet
     Texture spriteSheet;
+    public ArrayList<TextureRegion[]> sprites;
+    //Setting TextureRegions indexes
+    private static final int walkD=0;
+    private static final int walkL=1;
+    private static final int walkR=2;
+    private static final int walkU=3;  
+    private static final int walkLD=4;
+    private static final int walkLU=5;
+    private static final int walkRD=6;
+    private static final int walkRU=7;
+    
+    
+    
+    
+    
+    
     
 	public Jogador(World world,SpriteBatch spriteBatch,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
@@ -100,9 +122,20 @@ public class Jogador {
 		angle=0;
 		
 		//Loading Sprites
+		
+		sprites=new ArrayList<TextureRegion[]>();
 		try{
 		spriteSheet =  new Texture(Gdx.files.internal("/jogador/Sheet.png"));  
 		}catch(Exception e)	{e.printStackTrace();}
+		TextureRegion[][]temp =  TextureRegion.split(spriteSheet, spriteSheet.getWidth() / 
+				3, spriteSheet.getHeight() / 8);  
+		TextureRegion [] temporario = new TextureRegion[3];
+		for(int linha=0;linha<8;linha++){
+			for(int coluna=0;coluna<3;coluna++){
+				temporario[coluna]=temp[linha][coluna];
+			}
+			sprites.add(temporario);
+		}
 	}
 	
 	public void loop(){
