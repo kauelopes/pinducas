@@ -255,16 +255,7 @@ public class Jogador {
 			 velocidadeAtual = velocidadeDeCorrida;
 		 }else velocidadeAtual= velocidadeNormal;
 
-		//Botoes de movimentacao Diagonal
-         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnU))
-        	 upRight=true;
-         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnD))
-        	 downRight=true;
-         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnU))
-        	 upLeft=true;
-         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnD))
-        	 downLeft=true;
-		 
+		
          //Botoes de movimentacao Horizontal e Vertical
          if(Gdx.input.isKeyPressed(btnR)){
         	 right=true;
@@ -276,8 +267,7 @@ public class Jogador {
          }else if(Gdx.input.isKeyPressed(btnD)){
         	 down=true;
          }
-         
-         //Extra para diagonal
+       //Botoes de movimentacao Diagonal
          if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnU))
         	 upRight=true;
          if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnD))
@@ -286,26 +276,30 @@ public class Jogador {
         	 upLeft=true;
          if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnD))
         	 downLeft=true;
+		 
          
-         //Verifica se botoes foram soltos.
-         if(!Gdx.input.isKeyPressed(btnU)&&!Gdx.input.isKeyPressed(btnR))
-        	 upRight=false;
-         if(!Gdx.input.isKeyPressed(btnU)&&!Gdx.input.isKeyPressed(btnL))
-        	 upLeft=false;
-         if(!Gdx.input.isKeyPressed(btnD)&&!Gdx.input.isKeyPressed(btnR))
-        	 downRight=false;
-         if(!Gdx.input.isKeyPressed(btnD)&&!Gdx.input.isKeyPressed(btnL))
-        	 downLeft=false;
-         if(!Gdx.input.isKeyPressed(btnR))
+       
+         if(!Gdx.input.isKeyPressed(btnR)){
         	 right=false;
-         if(!Gdx.input.isKeyPressed(btnL))
+        	 upRight=false;
+        	 downRight=false;
+         }
+         if(!Gdx.input.isKeyPressed(btnL)){
         	 left=false;
-         if(!Gdx.input.isKeyPressed(btnU))
+        	 downLeft=false;
+        	 upLeft=false;
+         }
+         if(!Gdx.input.isKeyPressed(btnU)){
         	 up=false;
-         if(!Gdx.input.isKeyPressed(btnD))
+        	
+         }
+         if(!Gdx.input.isKeyPressed(btnD)){
         	 down=false;
+        	
+         }
         
-         
+
+       
 	 }	
 		
 	public float getX(){return body.getPosition().x;}
