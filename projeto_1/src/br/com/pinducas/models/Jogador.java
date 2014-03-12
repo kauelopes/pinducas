@@ -187,37 +187,36 @@ public class Jogador {
 		
 		if(right){
        	 vX = velocidadeAtual;
-            angle=(float)Math.toRadians(0);
-            if(up){
-           	 angle=(float)Math.toRadians(45);
-           	 vY = velocidadeAtual;
-            }
-            if(down){
-           	 angle=(float)Math.toRadians(315);
-           	 vY = -velocidadeAtual;
-            }
+         angle=(float)Math.toRadians(0);
         }
-        else if(left){
+        if(left){
        	 vX = -velocidadeAtual;
        	 angle=(float)Math.toRadians(180);
-            if(up){
-                    angle=(float)Math.toRadians(135);
-                    vY = velocidadeAtual;
-            }
-            if(down){
-                    angle=(float)Math.toRadians(225);
-                    vY = -velocidadeAtual;
-            }
         }
-        else if(up){
+        if(up){
        	 angle=(float)Math.toRadians(90);
        	 vY = velocidadeAtual;
         }
-        else if(down){
+        if(down){
        	 angle=(float)Math.toRadians(270);
        	 vY = -velocidadeAtual;
         }
-        
+        if(upRight){
+          	 angle=(float)Math.toRadians(45);
+          	 vY = velocidadeAtual;
+        }
+        if(downRight){
+          	 angle=(float)Math.toRadians(315);
+          	 vY = -velocidadeAtual;
+        }
+        if(upLeft){
+            angle=(float)Math.toRadians(135);
+            vY = velocidadeAtual;
+        }
+        if(downLeft){
+            angle=(float)Math.toRadians(225);
+            vY = -velocidadeAtual;
+    }
         body.setLinearVelocity(vX, vY);
         body.setTransform(body.getPosition(), angle);
 	}
@@ -256,14 +255,22 @@ public class Jogador {
 			 velocidadeAtual = velocidadeDeCorrida;
 		 }else velocidadeAtual= velocidadeNormal;
 
-         //Botoes de movimentacao horizontal
+		//Botoes de movimentacao Diagonal
+         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnU))
+        	 upRight=true;
+         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnD))
+        	 downRight=true;
+         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnU))
+        	 upLeft=true;
+         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnD))
+        	 downLeft=true;
+		 
+         //Botoes de movimentacao Horizontal e Vertical
          if(Gdx.input.isKeyPressed(btnR)){
         	 right=true;
          }else if(Gdx.input.isKeyPressed(btnL)){
         	 left=true;
          }
-         
-         //botoes de movimentao vertica;
          if(Gdx.input.isKeyPressed(btnU)){
         	 up=true;
          }else if(Gdx.input.isKeyPressed(btnD)){
@@ -280,27 +287,25 @@ public class Jogador {
          if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnD))
         	 downLeft=true;
          
-         //Botoes soltos.
-         if(!Gdx.input.isKeyPressed(btnR)){
+         //Verifica se botoes foram soltos.
+         if(!Gdx.input.isKeyPressed(btnU)&&!Gdx.input.isKeyPressed(btnR))
+        	 upRight=false;
+         if(!Gdx.input.isKeyPressed(btnU)&&!Gdx.input.isKeyPressed(btnL))
+        	 upLeft=false;
+         if(!Gdx.input.isKeyPressed(btnD)&&!Gdx.input.isKeyPressed(btnR))
+        	 downRight=false;
+         if(!Gdx.input.isKeyPressed(btnD)&&!Gdx.input.isKeyPressed(btnL))
+        	 downLeft=false;
+         if(!Gdx.input.isKeyPressed(btnR))
         	 right=false;
-        	 upRight=false;
-        	 downRight=false;
-         }
-         if(!Gdx.input.isKeyPressed(btnL)){
+         if(!Gdx.input.isKeyPressed(btnL))
         	 left=false;
-        	 upLeft=false;
-        	 downLeft=false;
-         }
-         if(!Gdx.input.isKeyPressed(btnU)){
+         if(!Gdx.input.isKeyPressed(btnU))
         	 up=false;
-        	 upRight=false;
-        	 upLeft=false;
-         }
-         if(!Gdx.input.isKeyPressed(btnD)){
+         if(!Gdx.input.isKeyPressed(btnD))
         	 down=false;
-        	 downRight=false;
-        	 downLeft=false;
-         }
+        
+         
 	 }	
 		
 	public float getX(){return body.getPosition().x;}

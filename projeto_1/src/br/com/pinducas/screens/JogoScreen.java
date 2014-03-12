@@ -152,8 +152,6 @@ public class JogoScreen implements Screen {
                 p.start();
 
                 
-                rayHandler.updateAndRender();
-                rayHandler.setCombinedMatrix(camera.combined);
                 
                 spriteBatch.begin();
                 p.draw(spriteBatch, delta);
@@ -161,6 +159,8 @@ public class JogoScreen implements Screen {
                 guarda.loop();
                 spriteBatch.end();
              
+                rayHandler.updateAndRender();
+                rayHandler.setCombinedMatrix(camera.combined);
                 
             /*---------------------------------------------------\
             |   Area abaixo reservada para testes com variaveis.  |
