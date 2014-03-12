@@ -107,7 +107,7 @@ public class JogoScreen implements Screen {
                
                 tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
        
-                guarda = new Jogador(world,new Vector2(0,0), rayHandler, 60, 150);
+                guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 60, 150);
                      
         font = new BitmapFont();
    
@@ -158,7 +158,7 @@ public class JogoScreen implements Screen {
                 //Verifica se o mouse esta dentro da luz
                 if(guarda.lanterna.contem((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)), 40)){
                         System.out.println("Contem o mouse");
-        }else System.out.println("Nao Contem");
+        }
                
                
                 /*---------------------------------------------------\

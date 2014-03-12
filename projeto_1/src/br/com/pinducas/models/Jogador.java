@@ -5,6 +5,8 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -14,25 +16,33 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Jogador {
+	
+	private World world;
 	public Body body;
 	public Lanterna lanterna;
-	private World world;
-	private int vY,
-				vX,
-				velocidadeNormal,
-				velocidadeDeCorrida,
-				velocidadeAtual;
-	private float angle;
-	int btnCorrida, btnR, btnL, btnU, btnD;
-    boolean right,left,up,down;
-    boolean lanternaSwitch;
+	boolean lanternaSwitch;
+	
+    SpriteBatch sb;
     
+    //Variaves de movimentação do jogador
+    private int vY,
+		vX,
+		velocidadeNormal,
+		velocidadeDeCorrida,
+		velocidadeAtual;
+    private float angle;
+    int btnCorrida, btnR, btnL, btnU, btnD;
+    boolean right,left,up,down,upRight,upLeft,downRight,downLeft;
     
-	public Jogador(World world,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
+    //Variaveis da spriteSheet
+    Texture spriteSheet;
+    
+	public Jogador(World world,SpriteBatch spriteBatch,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida){
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
 		this.velocidadeAtual= velocidadeDeMovimentacao;
 		this.world = world;
+		this.sb=spriteBatch;
 		CriaCorpo(position);
 		CriaLanterna(rayHandler);
 		btnCorrida = Keys.SHIFT_LEFT;
@@ -42,11 +52,13 @@ public class Jogador {
 		btnD = Keys.DOWN;
 	}
 	
-	public Jogador(World world,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida, int bCorrida, int bR, int bL, int bU, int bD){
+	public Jogador(World world,SpriteBatch spriteBatch,Vector2 position, RayHandler rayHandler, int velocidadeDeMovimentacao, int velocidadeDeCorrida, int bCorrida, int bR, int bL, int bU, int bD){
 		Initialize();
 		this.velocidadeDeCorrida = velocidadeDeCorrida;
 		this.velocidadeNormal = velocidadeDeMovimentacao;
+		this.velocidadeAtual=velocidadeDeMovimentacao;
 		this.world = world;
+		this.sb=spriteBatch;
 		CriaCorpo(position);
 		btnCorrida = bCorrida;
 		btnR = bR;
@@ -78,7 +90,7 @@ public class Jogador {
 	}
 
 	private void CriaLanterna(RayHandler rayHandler){
-		lanterna = new Lanterna(rayHandler, 100, Color.BLUE, 300, 0, 0, 0, 40);
+		lanterna = new Lanterna(rayHandler, 100, Color.BLACK, 300, 0, 0, 0, 40);
         lanterna.attachToBody(body, 0, 0);
 	}
 	public void Initialize(){
@@ -86,17 +98,65 @@ public class Jogador {
 		vY=0;
 		lanternaSwitch = true;
 		angle=0;
+		
+		//Loading Sprites
+		try{
+		spriteSheet =  new Texture(Gdx.files.internal("/jogador/Sheet.png"));  
+		}catch(Exception e)	{e.printStackTrace();}
 	}
 	
 	public void loop(){
-         anda(btnCorrida, btnR, btnL, btnU, btnD);
+         anda();
          Update();
+         Draw();
          estadoLanterna();
-         
+       
 	}
-
-	 
-	 private void estadoLanterna() {
+	
+	private void Update(){
+		 if(right){
+       	 vX = velocidadeAtual;
+            angle=(float)Math.toRadians(0);
+            if(up){
+           	 angle=(float)Math.toRadians(45);
+           	 vY = velocidadeAtual;
+            }
+            if(down){
+           	 angle=(float)Math.toRadians(315);
+           	 vY = -velocidadeAtual;
+            }
+        }
+        else if(left){
+       	 vX = -velocidadeAtual;
+       	 angle=(float)Math.toRadians(180);
+            if(up){
+                    angle=(float)Math.toRadians(135);
+                    vY = velocidadeAtual;
+            }
+            if(down){
+                    angle=(float)Math.toRadians(225);
+                    vY = -velocidadeAtual;
+            }
+        }
+        else if(up){
+       	 angle=(float)Math.toRadians(90);
+       	 vY = velocidadeAtual;
+        }
+        else if(down){
+       	 angle=(float)Math.toRadians(270);
+       	 vY = -velocidadeAtual;
+        }
+        
+        body.setLinearVelocity(vX, vY);
+        body.setTransform(body.getPosition(), angle);
+	}
+	
+	private void Draw(){
+		
+		
+	}
+	
+	private void estadoLanterna() {
 		 if(Gdx.input.isKeyPressed(Keys.F)&&lanternaSwitch){
 			 lanternaSwitch = false;
 			 if(lanterna.isActive())
@@ -107,44 +167,7 @@ public class Jogador {
 		 if(!Gdx.input.isKeyPressed(Keys.F)&&!lanternaSwitch)
 			 lanternaSwitch=true;
 	}
-	private void Update(){
-		 if(right){
-        	 vX = velocidadeAtual;
-             angle=(float)Math.toRadians(0);
-             if(up){
-            	 angle=(float)Math.toRadians(45);
-            	 vY = velocidadeAtual;
-             }
-             if(down){
-            	 angle=(float)Math.toRadians(315);
-            	 vY = -velocidadeAtual;
-             }
-         }
-         else if(left){
-        	 vX = -velocidadeAtual;
-        	 angle=(float)Math.toRadians(180);
-             if(up){
-                     angle=(float)Math.toRadians(135);
-                     vY = velocidadeAtual;
-             }
-             if(down){
-                     angle=(float)Math.toRadians(225);
-                     vY = -velocidadeAtual;
-             }
-         }
-         else if(up){
-        	 angle=(float)Math.toRadians(90);
-        	 vY = velocidadeAtual;
-         }
-         else if(down){
-        	 angle=(float)Math.toRadians(270);
-        	 vY = -velocidadeAtual;
-         }
-         
-         body.setLinearVelocity(vX, vY);
-         body.setTransform(body.getPosition(), angle);
-	}
-	private void anda(int btnCorrida, int btnR, int btnL, int btnU, int btnD){ 
+	private void anda(){ 
 		 //Botao de corrida
 		 vX=0;
 		 vY=0;
@@ -159,7 +182,7 @@ public class Jogador {
          }else if(Gdx.input.isKeyPressed(btnL)){
         	 left=true;
          }
-        
+         
          //botoes de movimentao vertica;
          if(Gdx.input.isKeyPressed(btnU)){
         	 up=true;
@@ -167,16 +190,37 @@ public class Jogador {
         	 down=true;
          }
          
+         //Extra para diagonal
+         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnU))
+        	 upRight=true;
+         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnD))
+        	 downRight=true;
+         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnU))
+        	 upLeft=true;
+         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnD))
+        	 downLeft=true;
          
          //Botoes soltos.
-         if(!Gdx.input.isKeyPressed(btnR))
+         if(!Gdx.input.isKeyPressed(btnR)){
         	 right=false;
-         if(!Gdx.input.isKeyPressed(btnL))
+        	 upRight=false;
+        	 downRight=false;
+         }
+         if(!Gdx.input.isKeyPressed(btnL)){
         	 left=false;
-         if(!Gdx.input.isKeyPressed(btnU))
+        	 upLeft=false;
+        	 downLeft=false;
+         }
+         if(!Gdx.input.isKeyPressed(btnU)){
         	 up=false;
-         if(!Gdx.input.isKeyPressed(btnD))
+        	 upRight=false;
+        	 upLeft=false;
+         }
+         if(!Gdx.input.isKeyPressed(btnD)){
         	 down=false;
+        	 downRight=false;
+        	 downLeft=false;
+         }
 	 }	
 		
 	public float getX(){return body.getPosition().x;}

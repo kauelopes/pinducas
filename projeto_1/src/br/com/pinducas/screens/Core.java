@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 public class Core extends Game implements ApplicationListener {
 	
 	OpenScreen openScreen;
+	JogoScreen jogoScreen;
 	
 	public int WIDTH;
 	public int HEIGHT;
@@ -18,8 +19,8 @@ public class Core extends Game implements ApplicationListener {
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
 		openScreen = new OpenScreen(this);
-
-		setScreen(openScreen);
+		jogoScreen= new JogoScreen(this);
+		setScreen(jogoScreen);
 		
 	}
 	
