@@ -171,8 +171,7 @@ public class JogoScreen implements Screen {
                 if(guarda.lanterna.contem((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)), 40)){
                         System.out.println("Contem o mouse");
         }
-               
-               
+              
                 /*---------------------------------------------------\
                 |          Fim do Espaco de teste                    |
                 \---------------------------------------------------*/

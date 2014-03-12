@@ -7,6 +7,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -32,7 +33,7 @@ public class Jogador {
     SpriteBatch sb;
     
     //Variaves de movimentação do jogador
-    private int vY,
+    public int vY,
 		vX,
 		velocidadeNormal,
 		velocidadeDeCorrida,
@@ -222,7 +223,8 @@ public class Jogador {
         body.setTransform(body.getPosition(), angle);
         
         
-       // System.out.println(body.getPosition());
+        System.out.println(body.getPosition());
+        
 	}
 	
 	private void Draw(){
@@ -261,7 +263,7 @@ public class Jogador {
 
 		
 		 keyTimer+=Gdx.graphics.getDeltaTime();
-		 System.out.println(keyTimer);
+		 
 		 if(keyTimer>0.07f){
          //Botoes de movimentacao Horizontal e Vertical
          if(Gdx.input.isKeyPressed(btnR)){
