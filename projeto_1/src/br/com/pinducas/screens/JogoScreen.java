@@ -1,27 +1,20 @@
 package br.com.pinducas.screens;
 
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import br.com.pinducas.models.Jogador;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -114,7 +107,7 @@ public class JogoScreen implements Screen {
 		
 		tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
 	
-		guarda = new Jogador(world, rayHandler, 40, 100);
+		guarda = new Jogador(world, rayHandler, 60, 150);
 		      
         font = new BitmapFont();
     
@@ -124,23 +117,6 @@ public class JogoScreen implements Screen {
 	    | 			Tudo fora desse espaco e final			  |
 	    \----------------------------------------------------*/
 		
-        BodyDef bodyDef = new BodyDef();  
-	    bodyDef.type = BodyType.StaticBody;  
-	    bodyDef.position.set(0,0);  
-	    
-	    Body body = world.createBody(bodyDef);
-	    
-	    PolygonShape shape = new PolygonShape();
-	    shape.setAsBox(50, 50);
-	    
-	    FixtureDef fixtureDef = new FixtureDef();  
-	    fixtureDef.shape = shape;
-	   
-	    
-	    body.createFixture(fixtureDef);
-	    body.setFixedRotation(true);
-
-
 	    
 		/*---------------------------------------------------\
 		|		 		Fim do Espaco de teste           	  |
