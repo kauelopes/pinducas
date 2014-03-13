@@ -1,20 +1,15 @@
 package br.com.pinducas.models;
 
-import java.awt.image.BufferedImage;
+
 import java.util.ArrayList;
-
 import box2dLight.RayHandler;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -23,25 +18,16 @@ import com.badlogic.gdx.physics.box2d.World;
 
 
 
-public class Jogador {
+public class Jogador extends Entidade {
 	
-	private World world;
-	public Body body;
+	
 	public Lanterna lanterna;
 	boolean lanternaSwitch;
-	
-    SpriteBatch sb;
-    
-    //Variaves de movimenta��o do jogador
-    public int vY,
-		vX,
-		velocidadeNormal,
-		velocidadeDeCorrida,
-		velocidadeAtual;
-    private float angle;
+  
+	//Valores dos botões
     int btnCorrida, btnR, btnL, btnU, btnD;
-    boolean right,left,up,down,upRight,upLeft,downRight,downLeft;
-    float keyTimer;
+    private float keyTimer;
+    
     //Variaveis da spriteSheet
     Texture spriteSheet;
     ArrayList<TextureRegion[]> sprites;
@@ -92,13 +78,13 @@ public class Jogador {
 		this.world = world;
 		this.sb=spriteBatch;
 		CriaCorpo(position);
+		CriaLanterna(rayHandler);
 		btnCorrida = bCorrida;
 		btnR = bR;
 		btnL = bL;
 		btnU = bU;
 		btnD = bD;
 	}
-	
 	
 	private void CriaCorpo(Vector2 position){
 		BodyDef bodyDef = new BodyDef();  
@@ -153,15 +139,10 @@ public class Jogador {
 		
 	}
 	
-	public void loop(){
-         anda();
-         Update();
-         Draw();
-         estadoLanterna();
-       
-	}
 	
-	private void Update(){
+	protected void Update(){
+		anda();
+		estadoLanterna();
 		//SETTING CURRENT ACTION
 		if(currentAction<=7)
 			numFrames=3;
@@ -219,14 +200,14 @@ public class Jogador {
         if(downLeft){
             angle=(float)Math.toRadians(225);
             vY = -velocidadeAtual;
-    }
+        }
         body.setLinearVelocity(vX, vY);
         body.setTransform(body.getPosition(), angle);
         
         
 	}
 	
-	private void Draw(){
+	protected void Draw(){
 		if(rodando){
 			timer+= Gdx.graphics.getDeltaTime();  
 			if(timer>0.2f){
