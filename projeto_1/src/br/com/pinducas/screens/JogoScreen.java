@@ -43,7 +43,7 @@ public class JogoScreen implements Screen {
         Jogador guarda;
        
         //Constantes do Box2dphysics
-        static final float BOX_STEP=1/60f;  
+        static final float BOX_STEP=1/30f;  
         static final int BOX_VELOCITY_ITERATIONS=6;  
         static final int BOX_POSITION_ITERATIONS=2;  
         static final float WORLD_TO_BOX=0.01f;  
@@ -105,7 +105,7 @@ public class JogoScreen implements Screen {
                
                 tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
        
-                guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 50, 150);
+                guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 20, 150);
 
                      
                 font = new BitmapFont();
@@ -137,7 +137,6 @@ public class JogoScreen implements Screen {
                 tileMapRenderer.setView(camera);
                 tileMapRenderer.render();
                
-                box2dDebugRender.render(world, camera.combined);
                
 
  
@@ -161,8 +160,7 @@ public class JogoScreen implements Screen {
             |   Area abaixo reservada para testes com variaveis.  |
             |                   Tudo fora desse espaco e final   |
             \----------------------------------------------------*/
-               
-                //Verifica se o mouse esta dentro da luz
+               System.out.println(guarda.body.getLinearVelocity());
                 /*---------------------------------------------------\
                 |          Fim do Espaco de teste                    |
                 \---------------------------------------------------*/

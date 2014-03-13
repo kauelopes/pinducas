@@ -123,7 +123,8 @@ public class Jogador {
 
 	private void CriaLanterna(RayHandler rayHandler){
 		lanterna = new Lanterna(rayHandler, 100, Color.YELLOW, 300, 0, 0, 0, 40);
-        lanterna.attachToBody(body, 0, 0);
+		lanterna.attachToBody(body, 0, 0);
+        
 	}
 	public void Initialize(){
 		vX=0;

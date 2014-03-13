@@ -5,6 +5,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 
 public class Lanterna extends ConeLight {
 	public Vector2 posicao = new Vector2();
@@ -22,5 +23,5 @@ public class Lanterna extends ConeLight {
 			return true;
 		}else return false;
 	}
-
+	
 }
