@@ -1,8 +1,9 @@
 package br.com.pinducas.screens;
  
 import box2dLight.RayHandler;
+import br.com.pinducas.models.Camera;
 import br.com.pinducas.models.Jogador;
- 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,12 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
  
 public class JogoScreen implements Screen {
@@ -30,7 +26,7 @@ public class JogoScreen implements Screen {
        
         Core game;
  
-        OrthographicCamera camera;
+        Camera camera;
  
         OrthographicCamera cam;
  
@@ -71,8 +67,8 @@ public class JogoScreen implements Screen {
         TiledMapRenderer tileMapRenderer;
        
         //Map
-    TiledMap map;      
-    ParticleEffect p;
+        TiledMap map;      
+        ParticleEffect p;
  
        
         /*---------------------------------------------------\
@@ -90,8 +86,8 @@ public class JogoScreen implements Screen {
         public void show() {
                
                 //Camera para Box2d, Sprite, tiledMap e Luz
-               
-                camera = new OrthographicCamera(game.WIDTH, game.HEIGHT);
+        		camera = new Camera(game.HEIGHT, game.WIDTH);
+
                 camera.update();
  
                
@@ -109,11 +105,11 @@ public class JogoScreen implements Screen {
                
                 tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
        
-                guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 60, 150);
+                guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 50, 150);
 
                      
-        font = new BitmapFont();
-   
+                font = new BitmapFont();
+                
                
             /*---------------------------------------------------\
             |   Area abaixo reservada para testes com variaveis.  |
@@ -134,7 +130,7 @@ public class JogoScreen implements Screen {
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT );
                 Gdx.gl.glClearColor(0, 0, 0, 1);
                
-              
+              camera.enquadraPonto(guarda.getX(), guarda.getY(), 200, 250);
                                                                
                 world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
                
@@ -143,18 +139,15 @@ public class JogoScreen implements Screen {
                
                 box2dDebugRender.render(world, camera.combined);
                
- 
-              
-               
-                camera.update();       
+
  
                 p.setPosition(0,0);
                 p.start();
 
                 
-                
+                spriteBatch.setProjectionMatrix(camera.combined);
                 spriteBatch.begin();
-                p.draw(spriteBatch, delta);
+                p.draw(spriteBatch);
                 font.draw(spriteBatch, " Distance:"+guarda.lanterna.posicao.x+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
                 guarda.loop();
                 spriteBatch.end();
@@ -162,22 +155,20 @@ public class JogoScreen implements Screen {
                 rayHandler.updateAndRender();
                 rayHandler.setCombinedMatrix(camera.combined);
                 
+                 
+                
             /*---------------------------------------------------\
             |   Area abaixo reservada para testes com variaveis.  |
             |                   Tudo fora desse espaco e final   |
             \----------------------------------------------------*/
                
                 //Verifica se o mouse esta dentro da luz
-                if(guarda.lanterna.contem((Gdx.input.getX()-game.WIDTH/2), (-(Gdx.input.getY()-game.HEIGHT/2)), 40)){
-                        System.out.println("Contem o mouse");
-        }
-              
                 /*---------------------------------------------------\
                 |          Fim do Espaco de teste                    |
                 \---------------------------------------------------*/
                
                
-               
+               camera.update();
         }
  
         @Override

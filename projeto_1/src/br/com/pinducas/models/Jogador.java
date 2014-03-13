@@ -32,7 +32,7 @@ public class Jogador {
 	
     SpriteBatch sb;
     
-    //Variaves de movimentação do jogador
+    //Variaves de movimentaï¿½ï¿½o do jogador
     public int vY,
 		vX,
 		velocidadeNormal,
@@ -112,9 +112,9 @@ public class Jogador {
 	    
 	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = dynamicCircle;  
-	    fixtureDef.density = 1.0f;  
+	    fixtureDef.density = 0.0f;  
 	    fixtureDef.friction = 0.0f;  
-	    fixtureDef.restitution = 0.2f;
+	    fixtureDef.restitution = 0.0f;
 	    
 	    body.createFixture(fixtureDef);
 	    body.setFixedRotation(true);	    
@@ -222,8 +222,6 @@ public class Jogador {
         body.setLinearVelocity(vX, vY);
         body.setTransform(body.getPosition(), angle);
         
-        
-        System.out.println(body.getPosition());
         
 	}
 	
