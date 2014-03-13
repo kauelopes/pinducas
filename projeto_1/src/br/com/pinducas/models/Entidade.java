@@ -47,5 +47,6 @@ public class Entidade {
 	protected void Draw(){
 		
 	}
-	
+	public float getX(){return body.getPosition().x;}
+	public float getY(){return body.getPosition().y;}
 }

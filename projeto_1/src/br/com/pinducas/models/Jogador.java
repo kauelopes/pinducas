@@ -293,7 +293,6 @@ public class Jogador extends Entidade {
 		 }
 	 }	
 		
-	public float getX(){return body.getPosition().x;}
-	public float getY(){return body.getPosition().y;}
+	
 	
 }
