@@ -6,6 +6,7 @@ import br.com.pinducas.models.Jogador;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,7 +24,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class JogoScreen implements Screen {   
 	Core game;
 	
-	Camera camera;
+	public static Camera camera;
         
     OrthographicCamera cam;
  
@@ -100,7 +101,7 @@ public class JogoScreen implements Screen {
            
         tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
         
-        guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 20, 150);
+        guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 20, 150,Keys.SHIFT_LEFT,Keys.D,Keys.A,Keys.W,Keys.S);
 
         font = new BitmapFont();
             
@@ -135,7 +136,10 @@ public class JogoScreen implements Screen {
 
     	p.setPosition(0,0);
     	p.start();
-            
+    	     
+    	rayHandler.updateAndRender();
+    	rayHandler.setCombinedMatrix(camera.combined);
+       
             
     	spriteBatch.setProjectionMatrix(camera.combined);
     	spriteBatch.begin();
@@ -148,10 +152,7 @@ public class JogoScreen implements Screen {
             
     	spriteBatch.end();
          
-    	rayHandler.updateAndRender();
-    	rayHandler.setCombinedMatrix(camera.combined);
-            
-             
+    	
             
         /*---------------------------------------------------\
         |   Area abaixo reservada para testes com variaveis.  |

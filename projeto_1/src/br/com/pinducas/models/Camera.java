@@ -1,6 +1,7 @@
 package br.com.pinducas.models;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 
 public class Camera extends OrthographicCamera{
 	

@@ -2,7 +2,10 @@ package br.com.pinducas.models;
 
 
 import java.util.ArrayList;
+
 import box2dLight.RayHandler;
+import br.com.pinducas.screens.JogoScreen;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -23,7 +26,7 @@ public class Jogador extends Entidade {
 	
 	public Lanterna lanterna;
 	boolean lanternaSwitch;
-  
+	
 	//Valores dos botões
     int btnCorrida, btnR, btnL, btnU, btnD;
     private float keyTimer;
@@ -37,16 +40,10 @@ public class Jogador extends Entidade {
     int currentAction;
     boolean rodando;
     float timer;
-    
+    float animationTime;
     //Setting TextureRegions indexes
-    private static final int walkD=0;
-    private static final int walkL=1;
-    private static final int walkR=2;
-    private static final int walkU=3;  
-    private static final int walkLD=4;
-    private static final int walkLU=5;
-    private static final int walkRD=6;
-    private static final int walkRU=7;
+    private static final int IDLE=0;
+    private static final int WALK=1;
     
     
     
@@ -109,7 +106,7 @@ public class Jogador extends Entidade {
 
 	private void CriaLanterna(RayHandler rayHandler){
 		lanterna = new Lanterna(rayHandler, 100, Color.YELLOW, 300, 0, 0, 0, 40);
-		lanterna.attachToBody(body, 0, 0);
+	//	lanterna.attachToBody(body, 0, 0);
         
 	}
 	public void Initialize(){
@@ -118,99 +115,117 @@ public class Jogador extends Entidade {
 		lanternaSwitch = true;
 		angle=0;
 		currentFrameNum=0;
-		currentAction = walkR;
+		currentAction = 0;
 		rodando=false;
 		
 		//Loading Sprites
 		sprites=new ArrayList<TextureRegion[]>();
 		
-		spriteSheet =  new Texture(Gdx.files.internal("assets/jogador/Sheet.png"));  
+		spriteSheet =  new Texture(Gdx.files.internal("assets/jogador/gtaSheet.png"));  
 		
 		TextureRegion[][]temp =  TextureRegion.split(spriteSheet, spriteSheet.getWidth() / 
-				3, spriteSheet.getHeight() / 8);  
-		TextureRegion [] temporario = new TextureRegion[3];
-		for(int linha=0;linha<8;linha++){
-			for(int coluna=0;coluna<3;coluna++){
-				temporario[coluna]=temp[linha][coluna];
-			}
-				sprites.add(temporario);
-				temporario = new TextureRegion[3];
+				12, spriteSheet.getHeight() / 2);  
+		
+		TextureRegion [] temporario = new TextureRegion[5];
+		for(int coluna=0;coluna<5;coluna++){
+			temporario[coluna]=temp[0][coluna];
 		}
+		sprites.add(temporario);
+		
+		temporario = new TextureRegion[12];
+		for(int coluna=0;coluna<12;coluna++){
+			temporario[coluna]=temp[1][coluna];
+		}
+		sprites.add(temporario);
 		
 	}
 	
 	
+	
 	protected void Update(){
 		anda();
-		estadoLanterna();
+		
+		
 		//SETTING CURRENT ACTION
-		if(currentAction<=7)
-			numFrames=3;
-		if(right)
-			currentAction=walkR;
-		if(left)
-			currentAction=walkL;
-		if(up)
-			currentAction=walkU;
-		if(down)
-			currentAction=walkD;
-		if(upRight)
-			currentAction=walkRU;
-		if(upLeft)
-			currentAction=walkLU;
-		if(downRight)
-			currentAction=walkRD;
-		if(downLeft)
-			currentAction=walkLD;
-		if(right||left||up||down||upRight||upLeft||downRight||downLeft)
-			rodando=true;
+		if(!right&&!left&&!up&&!down&&!upRight&&!upLeft&&!downRight&&!downLeft){
+			if(currentAction!=IDLE){
+				currentAction=IDLE;
+				numFrames=5;
+				currentFrameNum=0;
+				rodando=false;
+			}
+			
+		}
 		else
-			rodando=false;
+			rodando=true;
 		
-		
-		//WALKING AND SETTING LANTERN ANGLE
 		if(right){
-       	 vX = velocidadeAtual;
-         angle=(float)Math.toRadians(0);
-        }
-        if(left){
-       	 vX = -velocidadeAtual;
-       	 angle=(float)Math.toRadians(180);
-        }
-        if(up){
-       	 angle=(float)Math.toRadians(90);
-       	 vY = velocidadeAtual;
-        }
-        if(down){
-       	 angle=(float)Math.toRadians(270);
-       	 vY = -velocidadeAtual;
-        }
-        if(upRight){
-          	 angle=(float)Math.toRadians(45);
-          	 vY = velocidadeAtual;
-        }
-        if(downRight){
-          	 angle=(float)Math.toRadians(315);
-          	 vY = -velocidadeAtual;
-        }
-        if(upLeft){
-            angle=(float)Math.toRadians(135);
-            vY = velocidadeAtual;
-        }
-        if(downLeft){
-            angle=(float)Math.toRadians(225);
-            vY = -velocidadeAtual;
-        }
+	       	 vX = velocidadeAtual;
+	         angle=(float)Math.toRadians(0);
+	         currentAction=WALK;
+	         numFrames=12;
+	         animationTime=0.1f;
+	      }
+		if(left){
+			vX = -velocidadeAtual;
+			angle=(float)Math.toRadians(180);
+			currentAction=WALK;
+	        numFrames=12;
+	        animationTime=0.1f;
+		}
+		if(up){
+			angle=(float)Math.toRadians(90);
+			vY = velocidadeAtual;
+			currentAction=WALK;
+	        numFrames=12;
+	        animationTime=0.1f;
+		}
+		if(down){
+			angle=(float)Math.toRadians(270);
+			vY = -velocidadeAtual;
+			currentAction=WALK;
+	        numFrames=12;
+	        animationTime=0.1f;
+		}
+		if(upRight){
+			angle=(float)Math.toRadians(45);
+			vY = velocidadeAtual;
+			currentAction=WALK;
+	        numFrames=12;
+	        animationTime=0.1f;
+		}
+		if(downRight){
+			angle=(float)Math.toRadians(315);
+			vY = -velocidadeAtual;
+			currentAction=WALK;
+	        numFrames=12;
+	        animationTime=0.1f;
+		}
+		if(upLeft){
+			angle=(float)Math.toRadians(135);
+			vY = velocidadeAtual;
+			currentAction=WALK;
+	        numFrames=12;
+	        animationTime=0.1f;
+		}
+		if(downLeft){
+			angle=(float)Math.toRadians(225);
+			vY = -velocidadeAtual;
+			currentAction=WALK;
+	        numFrames=12;
+	        animationTime=0.1f;
+		}
+		
         body.setLinearVelocity(vX, vY);
-        body.setTransform(body.getPosition(), angle);
+        body.setTransform(body.getPosition(),angle);
         
-        
+        updateLanterna();
 	}
 	
 	protected void Draw(){
 		if(rodando){
 			timer+= Gdx.graphics.getDeltaTime();  
-			if(timer>0.2f){
+			if(timer>animationTime){
 			currentFrameNum++;
 				if(currentFrameNum>numFrames-1)
 					currentFrameNum=0;
@@ -219,10 +234,20 @@ public class Jogador extends Entidade {
 			
 		}
 		currentFrame = sprites.get(currentAction)[currentFrameNum];
-        sb.draw(currentFrame,body.getPosition().x-18,body.getPosition().y-18);                  
+		
+        sb.draw(currentFrame,body.getPosition().x-currentFrame.getRegionWidth()/2,body.getPosition().y-currentFrame.getRegionHeight()/2,
+        		currentFrame.getRegionWidth()/2,currentFrame.getRegionHeight()/2,currentFrame.getRegionWidth(),currentFrame.getRegionHeight(),
+        		2f,2f,(float)Math.toDegrees(angle));                  
 	}
 	
-	private void estadoLanterna() {
+	private void updateLanterna() {
+		int x =(int)(Gdx.input.getX()-(Gdx.graphics.getWidth()/2)-body.getPosition().x);
+		int y = (int)(-Gdx.input.getY()+(Gdx.graphics.getHeight()/2)-body.getPosition().y);
+		float angulo = new Vector2(x,y).angle();
+		
+		lanterna.setDirection(angulo);
+		lanterna.setPosition(new Vector2(body.getPosition().x,body.getPosition().y));
+		
 		 if(Gdx.input.isKeyPressed(Keys.F)&&lanternaSwitch){
 			 lanternaSwitch = false;
 			 if(lanterna.isActive())

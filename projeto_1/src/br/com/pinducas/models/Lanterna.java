@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class Lanterna extends ConeLight {
 	public Vector2 posicao = new Vector2();
-
 	public Lanterna(RayHandler rayHandler, int rays, Color color,
 			float distance, float x, float y, float directionDegree,
 			float coneDegree) {
