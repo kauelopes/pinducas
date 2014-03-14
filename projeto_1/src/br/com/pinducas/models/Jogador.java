@@ -106,7 +106,7 @@ public class Jogador extends Entidade {
 
 	private void CriaLanterna(RayHandler rayHandler){
 		lanterna = new Lanterna(rayHandler, 100, Color.YELLOW, 300, 0, 0, 0, 40);
-	//	lanterna.attachToBody(body, 0, 0);
+		lanterna.attachToBody(body, 0, 0);
         
 	}
 	public void Initialize(){
@@ -241,12 +241,7 @@ public class Jogador extends Entidade {
 	}
 	
 	private void updateLanterna() {
-		int x =(int)(Gdx.input.getX()-(Gdx.graphics.getWidth()/2)-body.getPosition().x);
-		int y = (int)(-Gdx.input.getY()+(Gdx.graphics.getHeight()/2)-body.getPosition().y);
-		float angulo = new Vector2(x,y).angle();
-		
-		lanterna.setDirection(angulo);
-		lanterna.setPosition(new Vector2(body.getPosition().x,body.getPosition().y));
+				
 		
 		 if(Gdx.input.isKeyPressed(Keys.F)&&lanternaSwitch){
 			 lanternaSwitch = false;
