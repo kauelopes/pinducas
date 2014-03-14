@@ -159,6 +159,8 @@ public class Jogador extends Entidade {
 		else
 			rodando=true;
 		
+		
+		
 		if(right){
 	       	 vX = velocidadeAtual;
 	         angle=(float)Math.toRadians(0);
@@ -187,38 +189,45 @@ public class Jogador extends Entidade {
 	        numFrames=12;
 	        animationTime=0.1f;
 		}
-		if(upRight){
+		
+		if(up&&right){
 			angle=(float)Math.toRadians(45);
 			vY = velocidadeAtual;
 			currentAction=WALK;
 	        numFrames=12;
 	        animationTime=0.1f;
 		}
-		if(downRight){
+		if(down&&right){
 			angle=(float)Math.toRadians(315);
 			vY = -velocidadeAtual;
 			currentAction=WALK;
 	        numFrames=12;
 	        animationTime=0.1f;
 		}
-		if(upLeft){
+		if(up&&left){
 			angle=(float)Math.toRadians(135);
 			vY = velocidadeAtual;
 			currentAction=WALK;
 	        numFrames=12;
 	        animationTime=0.1f;
 		}
-		if(downLeft){
+		if(down&left){
 			angle=(float)Math.toRadians(225);
 			vY = -velocidadeAtual;
 			currentAction=WALK;
 	        numFrames=12;
 	        animationTime=0.1f;
 		}
-		
         body.setLinearVelocity(vX, vY);
         body.setTransform(body.getPosition(),angle);
-        
+        if(right)
+        System.out.println("RIGHT: "+right);
+        if(left)
+        System.out.println("LEFT: "+left);
+        if(up)
+        System.out.println("UP: "+up);
+        if(down)
+        System.out.println("DOWN: "+down);
         updateLanterna();
 	}
 	
@@ -264,27 +273,26 @@ public class Jogador extends Entidade {
 		
 		 keyTimer+=Gdx.graphics.getDeltaTime();
 		 
-		 if(keyTimer>0.07f){
+		 if(keyTimer>0.080f){
          //Botoes de movimentacao Horizontal e Vertical
          if(Gdx.input.isKeyPressed(btnR)){
         	 right=true;
-         }else if(Gdx.input.isKeyPressed(btnL)){
+        	 left=false;
+        	 
+         }
+         else if(Gdx.input.isKeyPressed(btnL)){
         	 left=true;
+        	 right=false;
          }
          if(Gdx.input.isKeyPressed(btnU)){
         	 up=true;
-         }else if(Gdx.input.isKeyPressed(btnD)){
-        	 down=true;
+        	 down=false;
          }
-       //Botoes de movimentacao Diagonal
-         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnU))
-        	 upRight=true;
-         if(Gdx.input.isKeyPressed(btnR)&&Gdx.input.isKeyPressed(btnD))
-        	 downRight=true;
-         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnU))
-        	 upLeft=true;
-         if(Gdx.input.isKeyPressed(btnL)&&Gdx.input.isKeyPressed(btnD))
-        	 downLeft=true;
+         else if(Gdx.input.isKeyPressed(btnD)){
+        	 down=true;
+        	 up=false;
+         }
+      
 		 
         
          
