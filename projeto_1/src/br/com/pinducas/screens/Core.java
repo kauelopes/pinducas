@@ -1,12 +1,10 @@
 package br.com.pinducas.screens;
-
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
 
 
-public class Core extends Game implements ApplicationListener {
+public class Core extends Game {
 	
 	OpenScreen openScreen;
 	JogoScreen jogoScreen;
