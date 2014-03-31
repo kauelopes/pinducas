@@ -61,11 +61,7 @@ public class JogoScreen implements Screen {
     //Sprite da imagem Default do Libgdx
     Sprite sprite;
       
-    //Render do TiledMap
-    TiledMapRenderer tileMapRenderer;
-       
-    //Map
-    TiledMap map;      
+     
     ParticleEffect p;
  
        
@@ -97,9 +93,7 @@ public class JogoScreen implements Screen {
 
         box2dDebugRender = new Box2DDebugRenderer();
            
-        map = new TmxMapLoader().load("assets/mapa.tmx");
-           
-        tileMapRenderer = new OrthogonalTiledMapRenderer(map, 2 / 3f);
+
         
         guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 20, 150,Keys.SHIFT_LEFT,Keys.D,Keys.A,Keys.W,Keys.S);
 
@@ -128,8 +122,7 @@ public class JogoScreen implements Screen {
                                                            
     	world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
            
-    	tileMapRenderer.setView(camera);
-    	tileMapRenderer.render();
+
            
            
 
@@ -137,9 +130,7 @@ public class JogoScreen implements Screen {
     	p.setPosition(0,0);
     	p.start();
     	     
-    	rayHandler.updateAndRender();
-    	rayHandler.setCombinedMatrix(camera.combined);
-       
+    
             
     	spriteBatch.setProjectionMatrix(camera.combined);
     	spriteBatch.begin();
@@ -151,7 +142,9 @@ public class JogoScreen implements Screen {
             
             
     	spriteBatch.end();
-         
+    	rayHandler.updateAndRender();
+    	rayHandler.setCombinedMatrix(camera.combined);
+            
     	
             
         /*---------------------------------------------------\
