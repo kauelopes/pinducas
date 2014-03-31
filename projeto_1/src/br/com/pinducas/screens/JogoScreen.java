@@ -1,6 +1,9 @@
 package br.com.pinducas.screens;
  
+import java.awt.Point;
+
 import box2dLight.RayHandler;
+import br.com.pinducas.map.Mapa;
 import br.com.pinducas.models.Camera;
 import br.com.pinducas.models.Jogador;
 
@@ -49,6 +52,8 @@ public class JogoScreen implements Screen {
        
        
        
+    
+    Mapa mapinha;
     /*---------------------------------------------------\
     |   Area abaixo reservada para testes com variaveis.  |
     |                   Tudo fora desse espaco e final    |
@@ -104,6 +109,7 @@ public class JogoScreen implements Screen {
         |   Area abaixo reservada para testes com variaveis.  |
         |                   Tudo fora desse espaco e final    |
         \----------------------------------------------------*/
+        mapinha = new Mapa(world, new Point(10, 10));
            
        p = new ParticleEffect();
        p.load(Gdx.files.internal("assets/spark.p"), Gdx.files.internal("assets"));
@@ -157,6 +163,7 @@ public class JogoScreen implements Screen {
         \---------------------------------------------------*/
            
            
+    	box2dDebugRender.render(world, camera.combined);
     	camera.update();
     	
     }
