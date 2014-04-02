@@ -19,7 +19,7 @@ public class BlocoMaker {
 	
 	public Bloco dinamicoQ0(Vector2 position){
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(50, 50);
+		shape.setAsBox(50/4, 50/4);
 		return new Bloco(world, position, shape, 0.5f, 0.3f, 0.5f);		
 	}
 

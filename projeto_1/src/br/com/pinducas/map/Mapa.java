@@ -22,7 +22,7 @@ public class Mapa {
 	void criaMapa(){
 		for(int x = 0; x < tamanhoMapa.x; x++){
 			for(int y = 0; y < tamanhoMapa.y; y++){
-				blocosDoMapa[x][y] = maker.fixoQ0(new Vector2(x*50, y*50));
+				blocosDoMapa[x][y] = maker.dinamicoQ0(new Vector2(x*50, y*50));
 			}	
 		}		
 	}
