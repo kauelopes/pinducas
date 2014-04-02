@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Bloco {
@@ -17,23 +18,45 @@ public class Bloco {
 	private Texture texture;
 	
 	
-	public Bloco(World world, Vector2 position){
-		criaBloco(world, position);
+	public Bloco(World world, Vector2 position, PolygonShape shape){
+		criaBlocoEstatico(world, position, shape);
 	}
 	
-	private void criaBloco(World world, Vector2 position ) {
+	public Bloco(World world, Vector2 position, PolygonShape shape, float densidade, float friction, float restituicao ){
+		criaBlocoDinamico(world, position, shape, densidade, friction, restituicao);
+	}
+	
+	private void criaBlocoDinamico(World world, Vector2 position, PolygonShape shape, float densidade, float friction, float restituicao ) {
 		BodyDef bodyDef = new BodyDef();  
-	    bodyDef.type = BodyType.StaticBody;  
+	    bodyDef.type = BodyType.DynamicBody;
 	    bodyDef.position.set(position);  
 	    
 	    this.body = world.createBody(bodyDef);
+	    	    
+	    FixtureDef fixDef = new FixtureDef();
+	    fixDef.shape = shape;
+	    fixDef.density = densidade;
+	    fixDef.friction = friction;
+	    fixDef.restitution = restituicao;
 	    
-	    PolygonShape shape = new PolygonShape();
-	    shape.setAsBox(50, 50);
+	    body.createFixture(fixDef);	   
+	}
+	
+	
+	private void criaBlocoEstatico(World world, Vector2 position, PolygonShape shape) {
+		BodyDef bodyDef = new BodyDef();  
+	    bodyDef.type = BodyType.StaticBody;
+	    bodyDef.position.set(position);  
 	    
+	    this.body = world.createBody(bodyDef);
+	    	    
 	    FixtureDef fixDef = new FixtureDef();
 	    fixDef.shape = shape;
 	    
 	    body.createFixture(fixDef);	   
+	}
+	
+	public void deletaFixtureBloco(){
+		this.body.destroyFixture(body.getFixtureList().first());
 	}
 }

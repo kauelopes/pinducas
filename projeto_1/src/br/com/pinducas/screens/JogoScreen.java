@@ -3,6 +3,7 @@ package br.com.pinducas.screens;
 import java.awt.Point;
 
 import box2dLight.RayHandler;
+import br.com.pinducas.map.Bloco;
 import br.com.pinducas.map.Mapa;
 import br.com.pinducas.models.Camera;
 import br.com.pinducas.models.Jogador;
@@ -29,7 +30,6 @@ public class JogoScreen implements Screen {
 	
 	public static Camera camera;
         
-    OrthographicCamera cam;
  
     World world;
        
@@ -110,6 +110,7 @@ public class JogoScreen implements Screen {
         |                   Tudo fora desse espaco e final    |
         \----------------------------------------------------*/
         mapinha = new Mapa(world, new Point(10, 10));
+        Bloco bl = mapinha.getbloco(1, 1);
            
        p = new ParticleEffect();
        p.load(Gdx.files.internal("assets/spark.p"), Gdx.files.internal("assets"));
@@ -127,17 +128,10 @@ public class JogoScreen implements Screen {
     	camera.enquadraPonto(guarda.getX(), guarda.getY(), 200, 250);
                                                            
     	world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-           
-
-           
-           
-
 
     	p.setPosition(0,0);
     	p.start();
-    	     
-    
-            
+    	                
     	spriteBatch.setProjectionMatrix(camera.combined);
     	spriteBatch.begin();
     	p.draw(spriteBatch);
@@ -162,9 +156,9 @@ public class JogoScreen implements Screen {
        	|          Fim do Espaco de teste                    |
         \---------------------------------------------------*/
            
-           
-    	box2dDebugRender.render(world, camera.combined);
+        box2dDebugRender.render(world, camera.combined);   
     	camera.update();
+    	
     	
     }
     @Override

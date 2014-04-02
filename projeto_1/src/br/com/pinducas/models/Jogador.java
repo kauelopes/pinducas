@@ -95,9 +95,9 @@ public class Jogador extends Entidade {
 	    
 	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = dynamicCircle;  
-	    fixtureDef.density = 0.0f;  
+	    fixtureDef.density = 0.1f;  
 	    fixtureDef.friction = 0.0f;  
-	    fixtureDef.restitution = 0.0f;
+	    fixtureDef.restitution = 0.3f;
 	    
 	    body.createFixture(fixtureDef);
 	    body.setFixedRotation(true);	    
@@ -105,7 +105,7 @@ public class Jogador extends Entidade {
 	}
 
 	private void CriaLanterna(RayHandler rayHandler){
-		lanterna = new Lanterna(rayHandler, 100, Color.YELLOW, 300, 0, 0, 0, 40);
+		lanterna = new Lanterna(rayHandler, 100, Color.YELLOW, 400, 0, 0, 0, 40);
 		lanterna.attachToBody(body, 0, 0);
         
 	}
