@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import box2dLight.RayHandler;
 import br.com.pinducas.map.Bloco;
+import br.com.pinducas.map.BlocoMaker;
 import br.com.pinducas.map.Mapa;
 import br.com.pinducas.models.Camera;
 import br.com.pinducas.models.FpsGraph;
@@ -74,6 +75,7 @@ public class JogoScreen implements Screen {
     /*---------------------------------------------------\
 	|          Fim do Espaco de teste                    |
 	\---------------------------------------------------*/
+
    
  
     public JogoScreen(Core core){
@@ -107,13 +109,14 @@ public class JogoScreen implements Screen {
         |   Area abaixo reservada para testes com variaveis.  |
         |                   Tudo fora desse espaco e final    |
         \----------------------------------------------------*/
-        shaperenderer = new ShapeRenderer();        
+					shaperenderer = new ShapeRenderer();        
         grafico = new FpsGraph(shaperenderer,camera , game.HEIGHT, game.WIDTH);
                 
         font = new BitmapFont();
         /*---------------------------------------------------\
 		|       	Fim do Espaco de teste                    |
 		\---------------------------------------------------*/   
+
     }
     @Override
     public void render(float delta) {
@@ -149,6 +152,14 @@ public class JogoScreen implements Screen {
     	
         
 
+    	System.out.println(camera.position);
+    	if(Gdx.input.isTouched()&&touched!=true){
+    		makerTeste.dinamicoQ0(new Vector2(Gdx.input.getX()-camera.viewportWidth/2,-Gdx.input.getY()+camera.viewportHeight/2));
+    		touched=true;
+    	}
+    	if(!Gdx.input.isTouched()){
+    		touched=false;
+    	}
     	/*---------------------------------------------------\
        	|          Fim do Espaco de teste                    |
         \---------------------------------------------------*/
