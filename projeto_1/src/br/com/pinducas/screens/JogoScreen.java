@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import box2dLight.RayHandler;
 import br.com.pinducas.map.Bloco;
+import br.com.pinducas.map.BlocoMaker;
 import br.com.pinducas.map.Mapa;
 import br.com.pinducas.models.Camera;
 import br.com.pinducas.models.Jogador;
@@ -79,7 +80,8 @@ public class JogoScreen implements Screen {
     
     ShapeRenderer shaperend;
  
-       
+    BlocoMaker makerTeste;
+    boolean touched;
         /*---------------------------------------------------\
         |          Fim do Espaco de teste                    |
         \---------------------------------------------------*/
@@ -128,6 +130,9 @@ public class JogoScreen implements Screen {
        
        shaperend = new ShapeRenderer();
        shaperend.setProjectionMatrix(camera.combined);
+       
+       makerTeste = new BlocoMaker(world);
+       
             /*---------------------------------------------------\
             |       	Fim do Espaco de teste                    |
             \---------------------------------------------------*/
@@ -177,6 +182,14 @@ public class JogoScreen implements Screen {
     	shaperend.end();
     	contador++;
 
+    	System.out.println(camera.position);
+    	if(Gdx.input.isTouched()&&touched!=true){
+    		makerTeste.dinamicoQ0(new Vector2(Gdx.input.getX()-camera.viewportWidth/2,-Gdx.input.getY()+camera.viewportHeight/2));
+    		touched=true;
+    	}
+    	if(!Gdx.input.isTouched()){
+    		touched=false;
+    	}
     	/*---------------------------------------------------\
        	|          Fim do Espaco de teste                    |
         \---------------------------------------------------*/
