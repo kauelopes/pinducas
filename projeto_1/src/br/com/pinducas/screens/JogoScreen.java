@@ -69,6 +69,7 @@ public class JogoScreen implements Screen {
     ShapeRenderer shaperenderer;
     OrthographicCamera cameraDoGrafico;
          
+    Boolean touched;
     //Fonte para escrever em baixo   
     BitmapFont font;
                
@@ -109,10 +110,13 @@ public class JogoScreen implements Screen {
         |   Area abaixo reservada para testes com variaveis.  |
         |                   Tudo fora desse espaco e final    |
         \----------------------------------------------------*/
-					shaperenderer = new ShapeRenderer();        
+        shaperenderer = new ShapeRenderer();
+        
         grafico = new FpsGraph(shaperenderer,camera , game.HEIGHT, game.WIDTH);
-                
+        
         font = new BitmapFont();
+        
+        touched = false;
         /*---------------------------------------------------\
 		|       	Fim do Espaco de teste                    |
 		\---------------------------------------------------*/   
@@ -154,7 +158,7 @@ public class JogoScreen implements Screen {
 
     	System.out.println(camera.position);
     	if(Gdx.input.isTouched()&&touched!=true){
-    		makerTeste.dinamicoQ0(new Vector2(Gdx.input.getX()-camera.viewportWidth/2,-Gdx.input.getY()+camera.viewportHeight/2));
+    		mapinha.maker.dinamicoQ0(new Vector2(Gdx.input.getX()-camera.viewportWidth/2,-Gdx.input.getY()+camera.viewportHeight/2));
     		touched=true;
     	}
     	if(!Gdx.input.isTouched()){

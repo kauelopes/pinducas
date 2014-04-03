@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Mapa {
 	public Bloco[][] blocosDoMapa;
-	private BlocoMaker maker;
+	public BlocoMaker maker;
 	private Point tamanhoMapa;
 	
 	
