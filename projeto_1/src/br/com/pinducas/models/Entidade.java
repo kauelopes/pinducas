@@ -25,8 +25,10 @@ public class Entidade {
 		
 	}
 	public void Render(){
+		sb.begin();
 		Update();
 		Draw();
+		sb.end();
 	}
 	protected void Update(){
 		

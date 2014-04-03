@@ -7,6 +7,7 @@ import box2dLight.RayHandler;
 import br.com.pinducas.map.Bloco;
 import br.com.pinducas.map.Mapa;
 import br.com.pinducas.models.Camera;
+import br.com.pinducas.models.FpsGraph;
 import br.com.pinducas.models.Jogador;
 
 import com.badlogic.gdx.Gdx;
@@ -33,9 +34,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.List;
 public class JogoScreen implements Screen {   
 	Core game;
 	
-	FPSLogger logger;
 	
 	public static Camera camera;
+	
         
  
     World world;
@@ -51,41 +52,30 @@ public class JogoScreen implements Screen {
     Jogador guarda;
        
     //Constantes do Box2dphysics
-    static final float BOX_STEP=1/30f;  
+    static final float BOX_STEP=1/40f;  
     static final int BOX_VELOCITY_ITERATIONS=6;  
     static final int BOX_POSITION_ITERATIONS=2;  
     static final float WORLD_TO_BOX=0.01f;  
     static final float BOX_WORLD_TO=100f;
-    ArrayList<Point> points = new ArrayList<Point>();
-    int x = 1;
-    int contador = 0;
-       
-    
+     
     Mapa mapinha;
+    
     /*---------------------------------------------------\
     |   Area abaixo reservada para testes com variaveis.  |
     |                   Tudo fora desse espaco e final    |
     \----------------------------------------------------*/
-       
-       
+    FpsGraph grafico;
+    ShapeRenderer shaperenderer;
+    OrthographicCamera cameraDoGrafico;
+         
     //Fonte para escrever em baixo   
     BitmapFont font;
                
-    //Sprite da imagem Default do Libgdx
-    Sprite sprite;
-      
-     
-    ParticleEffect p;
-    
-    ShapeRenderer shaperend;
- 
-       
-        /*---------------------------------------------------\
-        |          Fim do Espaco de teste                    |
-        \---------------------------------------------------*/
+    /*---------------------------------------------------\
+	|          Fim do Espaco de teste                    |
+	\---------------------------------------------------*/
    
  
-        
     public JogoScreen(Core core){
     	this.game = core;    
     }
@@ -95,7 +85,6 @@ public class JogoScreen implements Screen {
     public void show() {
     	//Camera para Box2d, Sprite, tiledMap e Luz
     	camera = new Camera(game.HEIGHT, game.WIDTH);
-
     	camera.update();
 
         world = new World(new Vector2(0, 0), true);
@@ -107,86 +96,63 @@ public class JogoScreen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
 
         box2dDebugRender = new Box2DDebugRenderer();
-           
-        logger = new FPSLogger();
-
-        
+                   
         guarda = new Jogador(world,spriteBatch,new Vector2(0,0), rayHandler, 20, 150,Keys.SHIFT_LEFT,Keys.D,Keys.A,Keys.W,Keys.S);
 
-        font = new BitmapFont();
+        mapinha = new Mapa(world, new Point(30, 30));
+
             
            
         /*---------------------------------------------------\
         |   Area abaixo reservada para testes com variaveis.  |
         |                   Tudo fora desse espaco e final    |
         \----------------------------------------------------*/
-        mapinha = new Mapa(world, new Point(30, 30));
-        Bloco bl = mapinha.getbloco(1, 1);
-           
-       p = new ParticleEffect();
-       p.load(Gdx.files.internal("assets/spark.p"), Gdx.files.internal("assets"));
-       
-       shaperend = new ShapeRenderer();
-       shaperend.setProjectionMatrix(camera.combined);
-            /*---------------------------------------------------\
-            |       	Fim do Espaco de teste                    |
-            \---------------------------------------------------*/
-       
+        shaperenderer = new ShapeRenderer();        
+        grafico = new FpsGraph(shaperenderer,camera , game.HEIGHT, game.WIDTH);
+                
+        font = new BitmapFont();
+        /*---------------------------------------------------\
+		|       	Fim do Espaco de teste                    |
+		\---------------------------------------------------*/   
     }
     @Override
     public void render(float delta) {
-    	//Limpa a Tela
+    	
     	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT );
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	
     	camera.enquadraPonto(guarda.getX(), guarda.getY(), 200, 250);
                                                            
     	world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-
-    	p.setPosition(0,0);
-    	p.start();
-    	                
+  
     	spriteBatch.setProjectionMatrix(camera.combined);
-    	spriteBatch.begin();
-    	p.draw(spriteBatch);
-            
-    	font.draw(spriteBatch, " Distance:"+guarda.lanterna.posicao.x+"   Mouse_X:"+(Gdx.input.getX()-game.WIDTH/2) + " Mouse_Y:"+(-(Gdx.input.getY()-game.HEIGHT/2)) , -(game.WIDTH/2), -(game.HEIGHT/2)+100);
-            
-    	guarda.Render();
-            
-            
-    	spriteBatch.end();
+    	
+    	guarda.Render();                
+    	
     	rayHandler.updateAndRender();
     	rayHandler.setCombinedMatrix(camera.combined);
-            
     	
+    	box2dDebugRender.render(world, camera.combined);
+    	
+        spriteBatch.begin();
+    	font.draw(spriteBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), (camera.position.x + (game.WIDTH/2)-60), (camera.position.y -(game.HEIGHT/2)+18));
+    	spriteBatch.end();
+    	
+    	grafico.render();
+
+    	camera.update();
             
         /*---------------------------------------------------\
         |   Area abaixo reservada para testes com variaveis.  |
         |                   Tudo fora desse espaco e final   |
         \----------------------------------------------------*/
-        points.add(contador, new Point(contador*x,Gdx.graphics.getFramesPerSecond()));
-    	shaperend.begin(ShapeType.Line);
-    	for(int i = 0; i < points.size(); i++){
-    		if(i == 0){
-    			shaperend.line(0-(contador*x), 0, points.get(i).x-(contador*x), (points.get(i).y*10)-500);	
-    		}else shaperend.line(points.get(i-1).x-(contador*x), (points.get(i-1).y*10)-500, points.get(i).x-(contador*x), (points.get(i).y*10)-500);
-    		
-    	}
     	
-    	shaperend.end();
-    	contador++;
+        
 
     	/*---------------------------------------------------\
        	|          Fim do Espaco de teste                    |
         \---------------------------------------------------*/
-           
-        box2dDebugRender.render(world, camera.combined);
-        spriteBatch.begin();
-    	font.draw(spriteBatch, "fps: " + Gdx.graphics.getFramesPerSecond(), camera.position.x, camera.position.y);
-    	spriteBatch.end();
-
-    	camera.update();
+    	
     }
     @Override
     public void resize(int width, int height) {
