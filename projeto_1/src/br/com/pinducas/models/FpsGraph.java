@@ -37,7 +37,7 @@ public class FpsGraph {
 		
 		camera.viewportWidth = weigth*4;
 		camera.viewportHeight = heigth*16;
-		camera.translate(weigth*2, (heigth*8)+3600);
+		camera.translate(weigth*2, (heigth*8)+3200);
 		camera.update();
 		render.setProjectionMatrix(camera.combined);
 
